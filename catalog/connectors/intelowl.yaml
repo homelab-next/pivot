@@ -1,0 +1,26 @@
+schema: pivot.connector/1
+id: intelowl
+version: 0.1.0
+description: External reputation through IntelOwl playbooks. Inputs leave the network.
+kind: api
+egress: external
+independence_group: external-reputation   # refine per analyzer family later
+handling: {default_tlp: green}
+rate_limit: {per_minute: 10, concurrent: 1}
+methods:
+  - name: reputation_passive
+    description: Keyless passive analyzers only (no analyzer that fetches the target).
+    accepts: [inet:ipv4, inet:fqdn, inet:url, hash:sha256]
+    emits: {forms: [syn:tag, inet:asn, inet:whois:rec, inet:dns:a], verbs: [refs]}
+    interaction: passive
+    time_semantics: current_state
+    cost: {queries: 1, expected_ms: 30000}
+    max_results: 200
+  - name: url_fetch
+    description: Analyzers that retrieve the target. The target can see us.
+    accepts: [inet:url, inet:fqdn]
+    emits: {forms: [hash:sha256, inet:ipv4, crypto:x509:cert]}
+    interaction: active
+    time_semantics: point_in_time
+    cost: {queries: 1, expected_ms: 60000}
+    max_results: 50

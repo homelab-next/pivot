@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pivot/assessment.schema.json",
+  "title": "Assessment (outbound): a claim, its confidence, and every route that supports or contradicts it",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "investigation_id", "claim", "confidence", "routes", "contradictions", "tlp", "status"],
+  "properties": {
+    "schema": {"const": "pivot.assessment/1"},
+    "id": {"type": "string"},
+    "investigation_id": {"type": "string"},
+    "claim": {
+      "type": "object", "additionalProperties": false, "required": ["subject", "predicate", "object"],
+      "properties": {
+        "subject": {"$ref": "common.schema.json#/$defs/nodeKey"},
+        "predicate": {"enum": ["attributed_to", "member_of", "infrastructure_of", "uses", "communicated_with", "same_operator_as", "benign"]},
+        "object": {"oneOf": [{"$ref": "common.schema.json#/$defs/nodeKey"},
+                             {"type": "object", "additionalProperties": false, "required": ["tag"], "properties": {"tag": {"$ref": "common.schema.json#/$defs/tag"}}}]}
+      }
+    },
+    "confidence": {"$ref": "common.schema.json#/$defs/confidence"},
+    "confidence_basis": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "independent_groups": {"type": "integer", "minimum": 0},
+        "routes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "routes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/route"}},
+    "contradictions": {"type": "array", "items": {"$ref": "#/$defs/route"},
+                       "description": "Routes that argue against the claim. Recorded, never dropped."},
+    "proposed_tags": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/tag"}},
+    "tlp": {"$ref": "common.schema.json#/$defs/tlp"},
+    "status": {"enum": ["draft", "analyst_reviewed", "exported", "merged", "withdrawn"]},
+    "analyst_note": {"type": "string"}
+  },
+  "$defs": {
+    "route": {
+      "type": "object", "additionalProperties": false, "required": ["independence_groups", "hops"],
+      "properties": {
+        "independence_groups": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "hops": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["from", "via", "to", "step"],
+            "properties": {
+              "from": {"$ref": "common.schema.json#/$defs/nodeKey"},
+              "via": {"type": "string", "description": "<connector id>/<method>, or synapse/native:<prop|edge>"},
+              "to": {"oneOf": [{"$ref": "common.schema.json#/$defs/nodeKey"},
+                               {"type": "object", "additionalProperties": false, "required": ["tag"], "properties": {"tag": {"$ref": "common.schema.json#/$defs/tag"}}}]},
+              "step": {"type": "integer", "minimum": 0, "description": "Index into the investigation step log that produced this hop."}
+            }
+          }
+        }
+      }
+    }
+  }
+}

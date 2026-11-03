@@ -1,0 +1,26 @@
+schema: pivot.connector/1
+id: corpus
+version: 0.1.0
+description: >
+  Reports, notes and cti-agent output. Documents become media:news nodes with -(refs)> edges to
+  every entity extracted from them. Extraction reuses cti-agent's validated extractor; an entity
+  not present in the source text is never emitted.
+kind: corpus
+egress: internal
+independence_group: per-document-publisher   # resolved per document at runtime
+handling: {default_tlp: green}
+methods:
+  - name: documents_mentioning
+    accepts: [inet:ipv4, inet:fqdn, inet:url, hash:sha256, risk:vuln, risk:threat, risk:tool:software, inet:tls:ja4]
+    emits: {forms: [media:news], verbs: [refs]}
+    interaction: passive
+    time_semantics: current_state
+    cost: {queries: 1, expected_ms: 500}
+    max_results: 200
+  - name: entities_in_document
+    accepts: [media:news]
+    emits: {forms: [inet:ipv4, inet:fqdn, inet:url, hash:sha256, risk:vuln, risk:threat, risk:tool:software, it:mitre:attack:technique], verbs: [refs]}
+    interaction: passive
+    time_semantics: current_state
+    cost: {queries: 1, expected_ms: 500}
+    max_results: 1000

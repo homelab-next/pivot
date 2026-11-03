@@ -1,0 +1,42 @@
+schema: pivot.connector/1
+id: lake.dns
+version: 0.1.0
+description: Zeek DNS over Trino (iceberg.ocsf.dns_activity). Internal resolvers' view of who asked for what.
+kind: lake
+egress: internal
+independence_group: own-network-capture
+handling: {default_tlp: amber_strict}
+rate_limit: {per_minute: 30, concurrent: 2}
+gaps:
+  - "Resolved answers are not a column; ipv4<-fqdn resolution needs json_extract on ocsf_json."
+methods:
+  - name: host_queried_fqdn
+    description: Domains an internal host looked up in the window.
+    accepts: [inet:ipv4]
+    emits: {forms: [inet:fqdn], verbs: [queried]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 1500}
+    max_results: 1000
+    computes_prevalence: true
+    implementation:
+      sql: >
+        SELECT query_hostname, min(time) first_seen, max(time) last_seen, count(*) n
+        FROM iceberg.ocsf.dns_activity
+        WHERE src_endpoint_ip = :ip AND time BETWEEN :start AND :end
+        GROUP BY query_hostname
+  - name: fqdn_queried_by
+    description: Internal hosts that looked up a domain (and therefore its prevalence).
+    accepts: [inet:fqdn]
+    emits: {forms: [inet:ipv4], verbs: [queried]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 1500}
+    max_results: 1000
+    computes_prevalence: true
+    implementation:
+      sql: >
+        SELECT src_endpoint_ip, min(time) first_seen, max(time) last_seen, count(*) n
+        FROM iceberg.ocsf.dns_activity
+        WHERE query_hostname = :fqdn AND time BETWEEN :start AND :end
+        GROUP BY src_endpoint_ip

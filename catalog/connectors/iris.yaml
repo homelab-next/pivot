@@ -1,0 +1,16 @@
+schema: pivot.connector/1
+id: iris
+version: 0.1.0
+description: DFIR-IRIS prior cases. Also the export target for cases and assessments.
+kind: api
+egress: internal
+independence_group: prior-cases
+handling: {default_tlp: amber}
+methods:
+  - name: cases_for_ioc
+    accepts: [inet:ipv4, inet:fqdn, inet:url, hash:sha256, hash:md5]
+    emits: {forms: [risk:alert, meta:note], verbs: [refs]}
+    interaction: passive
+    time_semantics: current_state
+    cost: {queries: 1, expected_ms: 800}
+    max_results: 100

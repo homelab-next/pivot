@@ -1,0 +1,35 @@
+schema: pivot.connector/1
+id: lake.http
+version: 0.1.0
+description: Zeek HTTP over Trino (iceberg.ocsf.http_activity). Plaintext HTTP only.
+kind: lake
+egress: internal
+independence_group: own-network-capture
+handling: {default_tlp: amber_strict}
+gaps:
+  - "No cookie column; Zeek does not log cookie values without a policy script, and HTTPS hides them."
+methods:
+  - name: http_by_host
+    accepts: [inet:ipv4]
+    emits: {forms: [inet:fqdn, inet:url, inet:http:request], verbs: [requested]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 2000}
+    max_results: 500
+    computes_prevalence: true
+    implementation:
+      sql: >
+        SELECT http_request_host, http_request_uri, http_request_user_agent, count(*) n,
+               min(time) first_seen, max(time) last_seen
+        FROM iceberg.ocsf.http_activity
+        WHERE src_endpoint_ip = :ip AND time BETWEEN :start AND :end
+        GROUP BY 1, 2, 3
+  - name: hosts_by_user_agent
+    description: Who else sent this exact user agent (high prevalence for common browsers -- prune).
+    accepts: [inet:http:request]
+    emits: {forms: [inet:ipv4], verbs: [requested]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 3000}
+    max_results: 500
+    computes_prevalence: true

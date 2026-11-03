@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pivot/observation-batch.schema.json",
+  "title": "Observation batch (inbound): the one thing every connector returns per call",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "connector", "request", "executed_at", "stats", "nodes", "edges", "evidence", "handling", "errors"],
+  "properties": {
+    "schema": {"const": "pivot.observation-batch/1"},
+    "connector": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "method"],
+      "properties": {"id": {"type": "string"}, "version": {"type": "string"}, "method": {"type": "string"}}
+    },
+    "request": {
+      "type": "object", "additionalProperties": false, "required": ["inputs", "fingerprint"],
+      "properties": {
+        "inputs": {"type": "array", "minItems": 1, "items": {"$ref": "common.schema.json#/$defs/nodeKey"}},
+        "window": {"$ref": "common.schema.json#/$defs/window"},
+        "params": {"type": "object"},
+        "fingerprint": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$",
+                        "description": "Hash of connector id+version+method+inputs+window+params; makes reruns comparable."}
+      }
+    },
+    "executed_at": {"type": "string", "format": "date-time"},
+    "stats": {
+      "type": "object", "additionalProperties": false, "required": ["results", "truncated", "duration_ms"],
+      "properties": {
+        "rows_scanned": {"type": ["integer", "null"], "minimum": 0},
+        "results": {"type": "integer", "minimum": 0},
+        "truncated": {"type": "boolean", "description": "True if max_results cut the answer. Never silently partial."},
+        "duration_ms": {"type": "integer", "minimum": 0},
+        "queries": {"type": "integer", "minimum": 0}
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["ref", "form", "value"],
+        "properties": {
+          "ref": {"type": "string"},
+          "form": {"$ref": "common.schema.json#/$defs/form"},
+          "value": {"$ref": "common.schema.json#/$defs/nodeKey/properties/value"},
+          "props": {"type": "object"},
+          "tags": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/tag"}},
+          "seen": {"$ref": "common.schema.json#/$defs/seen"},
+          "prevalence": {
+            "description": "How common this value is. null = connector cannot compute it (must be explicit).",
+            "oneOf": [
+              {"type": "null"},
+              {"type": "object", "additionalProperties": false, "required": ["window_days"],
+               "properties": {
+                 "distinct_internal_hosts": {"type": "integer", "minimum": 0},
+                 "distinct_counterparts": {"type": "integer", "minimum": 0},
+                 "window_days": {"type": "integer", "minimum": 1}}}
+            ]
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["n1", "verb", "n2"],
+        "properties": {
+          "n1": {"$ref": "common.schema.json#/$defs/nodeRef"},
+          "verb": {"$ref": "common.schema.json#/$defs/verb"},
+          "n2": {"$ref": "common.schema.json#/$defs/nodeRef"},
+          "seen": {"$ref": "common.schema.json#/$defs/seen"},
+          "props": {"type": "object"}
+        }
+      }
+    },
+    "evidence": {
+      "description": "Pointer back to the raw record in its home system. The record is not copied.",
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["source_record"],
+        "properties": {
+          "ref": {"type": "string"},
+          "edge_index": {"type": "integer", "minimum": 0},
+          "source_record": {
+            "type": "object", "additionalProperties": false, "required": ["system", "locator"],
+            "properties": {
+              "system": {"type": "string", "examples": ["trino", "synapse", "intelowl", "misp", "iris", "corpus"]},
+              "locator": {"type": "string", "description": "Table, API path, view iden, or document id."},
+              "keys": {"type": "object"},
+              "offset": {"type": "object", "description": "For documents: char/page span of the mention."}
+            }
+          }
+        }
+      }
+    },
+    "handling": {
+      "type": "object", "additionalProperties": false, "required": ["tlp"],
+      "properties": {"tlp": {"$ref": "common.schema.json#/$defs/tlp"}}
+    },
+    "errors": {
+      "description": "Unsupported input or source failure. An empty result with no error means 'looked, found nothing'.",
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["code", "message"],
+        "properties": {
+          "code": {"enum": ["unsupported_input", "source_unavailable", "rate_limited", "timeout", "denied_by_policy", "internal"]},
+          "message": {"type": "string"},
+          "input": {"$ref": "common.schema.json#/$defs/nodeKey"}
+        }
+      }
+    }
+  }
+}

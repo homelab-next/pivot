@@ -1,0 +1,59 @@
+schema: pivot.connector/1
+id: lake.network
+version: 0.1.0
+description: Zeek conn/ssl over Trino (iceberg.ocsf.network_activity). Flows and TLS fingerprints.
+kind: lake
+egress: internal
+independence_group: own-network-capture
+handling: {default_tlp: amber_strict}
+rate_limit: {per_minute: 30, concurrent: 2}
+gaps:
+  - "ja3/ja3s/ja4/ja4s live only inside ocsf_json (not columns): JA4 pivots are json_extract scans until promoted."
+methods:
+  - name: counterparts
+    description: Aggregated flows (one row per src,dst,dst_port) for an address.
+    accepts: [inet:ipv4]
+    emits: {forms: [inet:ipv4, inet:flow], verbs: [communicated_with]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 3000}
+    max_results: 500
+    computes_prevalence: true
+    implementation:
+      sql: >
+        SELECT src_endpoint_ip, dst_endpoint_ip, dst_endpoint_port, count(*) n,
+               sum(traffic_bytes_out) bytes_out, min(time) first_seen, max(time) last_seen
+        FROM iceberg.ocsf.network_activity
+        WHERE (src_endpoint_ip = :ip OR dst_endpoint_ip = :ip) AND time BETWEEN :start AND :end
+        GROUP BY 1, 2, 3
+  - name: sni_for_ip
+    accepts: [inet:ipv4]
+    emits: {forms: [inet:fqdn], verbs: [served]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 2000}
+    max_results: 200
+    implementation:
+      sql: >
+        SELECT tls_server_name, count(*) n, min(time) first_seen, max(time) last_seen
+        FROM iceberg.ocsf.network_activity
+        WHERE dst_endpoint_ip = :ip AND tls_server_name IS NOT NULL AND time BETWEEN :start AND :end
+        GROUP BY 1
+  - name: ja4_for_ip
+    description: Client TLS fingerprints seen from an address (slow until ja4 is a column).
+    accepts: [inet:ipv4]
+    emits: {forms: [inet:tls:ja4], verbs: [presented]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 15000}
+    max_results: 100
+    computes_prevalence: true
+  - name: ips_for_ja4
+    description: Every address that presented a JA4 -- the tool/operator fingerprint pivot.
+    accepts: [inet:tls:ja4]
+    emits: {forms: [inet:ipv4], verbs: [presented]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 15000}
+    max_results: 500
+    computes_prevalence: true

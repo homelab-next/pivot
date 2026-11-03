@@ -1,0 +1,30 @@
+{
+  "schema": "pivot.assessment/1",
+  "id": "asm-20261103-001",
+  "investigation_id": "inv-20261103-001",
+  "claim": {
+    "subject": {"form": "inet:ipv4", "value": "203.0.113.7"},
+    "predicate": "infrastructure_of",
+    "object": {"tag": "cno.threat.crm.example_cluster"}
+  },
+  "confidence": "moderate",
+  "confidence_basis": {"independent_groups": 2, "routes": 3},
+  "routes": [
+    {"independence_groups": ["honeypot", "misp-daily-feed"],
+     "hops": [
+       {"from": {"form": "inet:ipv4", "value": "203.0.113.7"}, "via": "lake.honeypot/hassh_for_ip",
+        "to": {"form": "hash:md5", "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"}, "step": 0},
+       {"from": {"form": "hash:md5", "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"}, "via": "synapse/neighbours",
+        "to": {"tag": "cno.threat.crm.example_cluster"}, "step": 2}]},
+    {"independence_groups": ["own-network-capture", "cti-agent-graph-sync"],
+     "hops": [
+       {"from": {"form": "inet:ipv4", "value": "203.0.113.7"}, "via": "lake.network/sni_for_ip",
+        "to": {"form": "inet:fqdn", "value": "cdn-update.example"}, "step": 1},
+       {"from": {"form": "inet:fqdn", "value": "cdn-update.example"}, "via": "synapse/tags_for",
+        "to": {"tag": "cno.threat.crm.example_cluster"}, "step": 3}]}
+  ],
+  "contradictions": [],
+  "proposed_tags": ["cno.threat.crm.example_cluster", "cno.infra.c2", "cti.conf.moderate"],
+  "tlp": "amber",
+  "status": "draft"
+}

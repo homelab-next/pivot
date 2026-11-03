@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pivot/common.schema.json",
+  "title": "Shared definitions",
+  "$defs": {
+    "form": {"type": "string", "pattern": "^_?[a-z0-9]+(:[a-z0-9_]+)+$",
+             "description": "Synapse form name, e.g. inet:ipv4, or an extended _pivot:* form."},
+    "nodeKey": {
+      "type": "object", "additionalProperties": false, "required": ["form", "value"],
+      "properties": {
+        "form": {"$ref": "#/$defs/form"},
+        "value": {"description": "Primary value as Synapse would norm it; guid forms use a list of seed values.",
+                  "oneOf": [{"type": "string"}, {"type": "integer"}, {"type": "array", "items": {"type": ["string", "integer"]}}]}
+      }
+    },
+    "nodeRef": {
+      "description": "Either a natural key or a batch-local ref.",
+      "oneOf": [
+        {"$ref": "#/$defs/nodeKey"},
+        {"type": "object", "additionalProperties": false, "required": ["ref"], "properties": {"ref": {"type": "string"}}}
+      ]
+    },
+    "seen": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "first": {"type": "string", "format": "date-time"},
+        "last": {"type": "string", "format": "date-time"},
+        "count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "tag": {"type": "string", "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)*$"},
+    "tlp": {"enum": ["clear", "green", "amber", "amber_strict", "red"]},
+    "verb": {"type": "string", "pattern": "^[a-z_]+$"},
+    "confidence": {"enum": ["low", "moderate", "high"],
+                   "description": "ICD-203 band, matches #cti.conf.<band>."},
+    "window": {
+      "type": "object", "additionalProperties": false, "required": ["start", "end"],
+      "properties": {"start": {"type": "string", "format": "date-time"}, "end": {"type": "string", "format": "date-time"}}
+    }
+  }
+}

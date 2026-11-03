@@ -1,0 +1,40 @@
+schema: pivot.connector/1
+id: lake.honeypot
+version: 0.1.0
+description: Cowrie honeypot sessions (iceberg.honeypot.events). Same pivots as honeypot_report.py's HASSH and command-fingerprint cards.
+kind: lake
+egress: internal
+independence_group: honeypot
+handling: {default_tlp: amber}
+methods:
+  - name: sessions_for_ip
+    accepts: [inet:ipv4]
+    emits: {forms: [hash:sha256, inet:url, inet:user, inet:passwd], verbs: [used, downloaded]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 1500}
+    max_results: 500
+  - name: hassh_for_ip
+    description: SSH client fingerprints (stored as hash:md5 until an extended form exists).
+    accepts: [inet:ipv4]
+    emits: {forms: [hash:md5], verbs: [presented]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 1500}
+    max_results: 50
+  - name: ips_for_hassh
+    accepts: [hash:md5]
+    emits: {forms: [inet:ipv4], verbs: [presented]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 1500}
+    max_results: 500
+    computes_prevalence: true
+  - name: ips_for_command_fingerprint
+    description: Normalised command-sequence hash -> every IP that ran it (honeypot_report.normalize_command).
+    accepts: [hash:sha256]
+    emits: {forms: [inet:ipv4], verbs: [ran]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 1500}
+    max_results: 500
