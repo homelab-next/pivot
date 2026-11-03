@@ -8,6 +8,7 @@ independence_group: prior-cases
 handling: {default_tlp: amber}
 methods:
   - name: cases_for_ioc
+    prior_hit_rate: 0.1   # seed guess; replaced by measured rate
     accepts: [inet:ipv4, inet:fqdn, inet:url, hash:sha256, hash:md5]
     emits: {forms: [risk:alert, meta:note], verbs: [refs]}
     interaction: passive

@@ -1,0 +1,83 @@
+{
+ "schema": "pivot.observation-batch/1",
+ "connector": {
+  "id": "lake.network",
+  "version": "0.1.0",
+  "method": "sni_for_ip"
+ },
+ "request": {
+  "inputs": [
+   {
+    "form": "inet:ipv4",
+    "value": "203.0.113.7"
+   }
+  ],
+  "window": {
+   "start": "2026-10-04T00:00:00Z",
+   "end": "2026-11-03T00:00:00Z"
+  },
+  "fingerprint": "sha256:7ec79881845edfbffc3d83c1c732d1fa57cdd21bb0990b34586bc412b753e979"
+ },
+ "executed_at": "2026-11-03T17:00:09Z",
+ "stats": {
+  "rows_scanned": null,
+  "results": 2,
+  "truncated": false,
+  "duration_ms": 900,
+  "queries": 1
+ },
+ "nodes": [
+  {
+   "ref": "n0",
+   "form": "inet:fqdn",
+   "value": "cdn-update.example"
+  },
+  {
+   "ref": "n1",
+   "form": "inet:fqdn",
+   "value": "edge.cdn-provider.example"
+  }
+ ],
+ "edges": [
+  {
+   "n1": {
+    "form": "inet:ipv4",
+    "value": "203.0.113.7"
+   },
+   "verb": "refs",
+   "n2": {
+    "ref": "n0"
+   }
+  },
+  {
+   "n1": {
+    "form": "inet:ipv4",
+    "value": "203.0.113.7"
+   },
+   "verb": "refs",
+   "n2": {
+    "ref": "n1"
+   }
+  }
+ ],
+ "evidence": [
+  {
+   "ref": "n0",
+   "source_record": {
+    "system": "example",
+    "locator": "03-network-sni"
+   }
+  },
+  {
+   "ref": "n1",
+   "source_record": {
+    "system": "example",
+    "locator": "03-network-sni"
+   }
+  }
+ ],
+ "handling": {
+  "tlp": "amber"
+ },
+ "errors": []
+}

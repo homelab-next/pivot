@@ -1,0 +1,16 @@
+plan r0 (initial): 106 routes blocked 60, viable 46
+would unlock more routes:
+  ◌ allow external egress  (60 route(s))
+next:
+  ▶ synapse/neighbours(203.0.113.7)  advances 18 route(s), value 2.16
+  ▶ lake.honeypot/sessions_for_ip(203.0.113.7)  advances 6 route(s), value 0.792
+  ▶ lake.http/http_by_host(203.0.113.7)  advances 6 route(s), value 0.528
+  ▶ lake.dns/host_queried_fqdn(203.0.113.7)  advances 3 route(s), value 0.462
+  ▶ lake.network/sni_for_ip(203.0.113.7)  advances 3 route(s), value 0.33
+routes:
+  #1   viable           p=0.3    r-84417b0d64 inet:ipv4 ─▶ synapse/tags_for→ syn:tag
+  #2   viable           p=0.21   r-3f3e2fe3fa inet:ipv4 ─▶ lake.dns/host_queried_fqdn→ inet:fqdn ─· synapse/tags_for→ syn:tag
+  #3   viable           p=0.18   r-223bee1d3f inet:ipv4 ─▶ synapse/neighbours→ inet:url ─· synapse/tags_for→ syn:tag
+  #4   viable           p=0.18   r-34b2eb31b0 inet:ipv4 ─▶ lake.honeypot/sessions_for_ip→ inet:url ─· synapse/tags_for→ syn:tag
+  #5   viable           p=0.18   r-49e6ce89a7 inet:ipv4 ─▶ synapse/neighbours→ hash:sha256 ─· synapse/tags_for→ syn:tag
+  #6   viable           p=0.18   r-acaa66216f inet:ipv4 ─▶ synapse/neighbours→ inet:fqdn ─· synapse/tags_for→ syn:tag

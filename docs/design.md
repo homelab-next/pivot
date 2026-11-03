@@ -1,6 +1,6 @@
 # Pivot: design
 
-Status: **draft, nothing built yet.** This document fixes the data shapes and the moving parts
+Status: **draft. Built so far: contracts (schemas, manifests) and the route planner.** This document fixes the data shapes and the moving parts
 so that the first build, and every data source after it, plugs into the same contracts.
 
 ## 1. What problem this solves
@@ -236,7 +236,70 @@ is driven by the number of independent groups, not the number of routes. Contrad
 evidence (for example a sinkhole tag, or a benign IntelOwl verdict) is recorded on the
 assessment, never dropped.
 
-### 6.3 Goal predicates
+### 6.3 The route plan: the whole chain, not just the next step
+
+The engine does not only pick the next pivot. It keeps a **route plan**
+(`schemas/plan.schema.json`, implemented in `pivot/planner.py`, CLI `tools/plan.py`): every
+ordered chain of pivots from the seeds to the goal, with every hop's current status. The plan
+is regenerated after each step, and each revision is kept with a list of what changed and why.
+
+It works at two levels:
+
+- **Abstract routes** come from the catalog alone. Each one is a chain of (connector, method)
+  hops whose forms link up from a seed form to a goal form, with no form visited twice. This
+  is the full list of ways the question *could* be answered, before any query runs.
+- **Bound routes** follow the evidence. Hop 1 is bound to the seed values. When a hop is
+  confirmed, its result values become the next hop's inputs. A hop is decided by the
+  observation batch whose connector, method and inputs match it.
+
+| Hop status | Meaning |
+|---|---|
+| `ready` | can run now (its inputs are bound) |
+| `pending` | waits on an earlier hop |
+| `confirmed` | returned values of the expected form that survived pruning |
+| `denied` | ran and found nothing: negative evidence for *this* binding and window |
+| `pruned` | found only values too common to follow |
+| `error` | the source failed; retryable, not evidence |
+| `blocked` | policy: external egress or active interaction is off for this investigation |
+| `needs_collection` | the method is `planned`/`unavailable`; `needs` says what would enable it |
+
+A route's status follows from its hops (`completed`, `in_progress`, `viable`,
+`needs_collection`, `blocked`, `dead`). Its **`p_success` is the product of the hit rates of the
+hops not yet confirmed.** That one rule is the whole update mechanism:
+
+- confirming a hop sets its factor to 1, so every route through it rises;
+- denying or pruning a hop sets its route to 0, so every route through it drops out;
+- hit rates start as seed guesses in the manifests (`prior_hit_rate`) and are meant to be
+  replaced by rates measured from step logs (`p_source: measured`).
+
+The plan then answers three questions at any point:
+
+1. **What should run next?** `next_actions` lists runnable calls, deduplicated across routes
+   (one `synapse/neighbours(IP)` call can advance 18 routes), ranked by the success chance of the
+   routes it advances, per query.
+2. **How far is each path from an answer?** Each route shows every remaining hop in order, with
+   its cost and chance of success.
+3. **What would we need that we don't have?** `summary.requirements` rolls up the `needs` of
+   blocked and needs-collection routes by how many routes each would unlock (for example
+   "allow external egress: 60 routes", "Zeek cookie logging: …"). These are collection
+   requirements and policy decisions, stated as what they buy.
+
+Once one route completes, ranking switches to **corroboration**: a route only adds confidence if
+it brings an independence group that no completed route already has (§6.2). Routes that would
+only repeat the same sources are marked `corroborates: false` and ranked down.
+
+`examples/scenario/` walks one seed through three revisions: initial plan, a denial plus a
+confirmation, then a completion followed by a re-rank toward independent sources.
+
+Deliberate limits of the current planner:
+
+- it plans over forms, so a route that needs a *specific property* (for example only
+  non-CDN IPs) relies on pruning, not on the plan;
+- `max_routes` caps enumeration shortest-first, and the plan says when it truncated;
+- a denial is scoped to the window that was searched; widening the window re-opens the hop
+  (a new batch with a different fingerprint).
+
+### 6.4 Goal predicates
 
 A goal is a Storm query evaluated inside the investigation's fork, so goals use the same
 language as the rest of Synapse:
@@ -250,7 +313,7 @@ language as the rest of Synapse:
 ## 7. Outbound data shape: investigation and assessment
 
 `schemas/investigation.schema.json` is the record of the whole case: question, seeds, goals,
-budget, Synapse view, linked IRIS case, and the **step log**. Each executed pivot is one
+budget, Synapse view, linked IRIS case, the **step log**, and the **plan revisions** (§6.3). Each executed pivot is one
 step: connector, inputs, batch fingerprint, result count, duration, pruned count. The step log
 makes an investigation replayable and auditable. Re-running it later against fresh data shows
 what changed.
@@ -333,7 +396,7 @@ Each phase ends with something usable and a check that proves it.
 | Phase | Builds | Done when |
 |---|---|---|
 | **0 Contracts** (this commit) | schemas, example manifests, native-pivot derivation | examples validate; derivation reproduces the 584 / 1,982 / 88 counts |
-| **1 Catalog** | catalog builder + `pivot routes FROM TO --max-hops N` + coverage report | lists the real routes from `inet:ipv4` to `risk:threat` across Synapse and two lake connectors; names the cookie gap |
+| **1 Catalog + plan** | route planner over the catalog (`pivot/planner.py`, `tools/plan.py`) with live hop status, revision diffs and requirement roll-up; native-pivot coverage report still to do | **planner done**: lists the real routes from `inet:ipv4` to a `cno.threat` tag, re-ranks as evidence lands, and names the cookie gap as a requirement (14 tests, `examples/scenario/`) |
 | **2 Engine (CLI)** | loop, budgets, pruning, view-per-investigation, step log; connectors: Synapse, lake DNS, lake network, honeypot | a honeypot IP seeds an investigation that ends at a tagged node or reports exhaustion, inside budget, replayable |
 | **3 GUI** | web app: graph canvas (Cytoscape.js), route explorer, evidence panel, timeline, case pane | an analyst can run phase 2's case by clicking |
 | **4 Case + corroboration** | IRIS export, independence scoring, assessment record, merge proposal | an assessment with two or more independent routes lands in IRIS with its routes |

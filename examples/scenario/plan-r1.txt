@@ -1,0 +1,20 @@
+plan r1 (steps 1-2): 106 routes blocked 60, dead 1, in_progress 3, viable 42
+would unlock more routes:
+  ◌ allow external egress  (60 route(s))
+changes:
+  r-0ae3226da6 viable -> in_progress (rank 14 -> 7): hop 1 lake.honeypot/hassh_for_ip confirmed
+  r-10ac8c8743 viable -> in_progress (rank 16 -> 8): hop 1 lake.honeypot/hassh_for_ip confirmed
+  r-8a0be599ed viable -> in_progress (rank 24 -> 9): hop 1 lake.honeypot/hassh_for_ip confirmed
+  r-84417b0d64 viable -> dead (rank 1 -> 106): hop 1 synapse/tags_for denied (ran and found nothing matching the goal)
+next:
+  ▶ synapse/neighbours(203.0.113.7)  advances 18 route(s), value 2.16
+  ▶ lake.honeypot/sessions_for_ip(203.0.113.7)  advances 6 route(s), value 0.792
+  ▶ synapse/neighbours(ec7378c1a92f5a8dde7e8b7a1ddf33d1)  advances 3 route(s), value 0.54
+  ▶ lake.http/http_by_host(203.0.113.7)  advances 6 route(s), value 0.528
+  ▶ lake.dns/host_queried_fqdn(203.0.113.7)  advances 3 route(s), value 0.462
+routes:
+  #1   viable           p=0.21   r-3f3e2fe3fa inet:ipv4 ─▶ lake.dns/host_queried_fqdn→ inet:fqdn ─· synapse/tags_for→ syn:tag
+  #2   viable           p=0.18   r-223bee1d3f inet:ipv4 ─▶ synapse/neighbours→ inet:url ─· synapse/tags_for→ syn:tag
+  #3   viable           p=0.18   r-34b2eb31b0 inet:ipv4 ─▶ lake.honeypot/sessions_for_ip→ inet:url ─· synapse/tags_for→ syn:tag
+  #4   viable           p=0.18   r-49e6ce89a7 inet:ipv4 ─▶ synapse/neighbours→ hash:sha256 ─· synapse/tags_for→ syn:tag
+  #5   viable           p=0.18   r-acaa66216f inet:ipv4 ─▶ synapse/neighbours→ inet:fqdn ─· synapse/tags_for→ syn:tag

@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pivot/plan.schema.json",
+  "title": "Route plan: every ordered chain of pivots that could reach the goal, with live per-hop status",
+  "description": "Regenerated after every step. Each revision is kept; 'changes' says what moved and why.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "revision", "generated_at", "trigger", "seeds", "goal", "policy", "summary", "next_actions", "routes", "changes"],
+  "properties": {
+    "schema": {"const": "pivot.plan/1"},
+    "investigation_id": {"type": "string"},
+    "revision": {"type": "integer", "minimum": 0},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "trigger": {"type": "string", "description": "'initial', or the step / batch fingerprint that caused this revision."},
+    "seeds": {"type": "array", "minItems": 1, "items": {"$ref": "common.schema.json#/$defs/nodeKey"}},
+    "goal": {
+      "type": "object", "additionalProperties": false, "required": ["forms"],
+      "properties": {
+        "forms": {"type": "array", "minItems": 1, "items": {"$ref": "common.schema.json#/$defs/form"}},
+        "tag_prefix": {"$ref": "common.schema.json#/$defs/tag"}
+      }
+    },
+    "policy": {
+      "type": "object", "additionalProperties": false, "required": ["max_hops", "allow_external_egress", "allow_active"],
+      "properties": {
+        "max_hops": {"type": "integer", "minimum": 1},
+        "allow_external_egress": {"type": "boolean"},
+        "allow_active": {"type": "boolean"},
+        "max_routes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["routes", "by_status", "independent_groups_completed"],
+      "properties": {
+        "routes": {"type": "integer", "minimum": 0},
+        "routes_truncated": {"type": "boolean"},
+        "by_status": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "independent_groups_completed": {"type": "array", "items": {"type": "string"}},
+        "best_route": {"type": ["string", "null"]},
+        "requirements": {
+          "description": "Collection, config or policy changes that would unblock routes, most routes first. These are the 'what would we need' answers.",
+          "type": "array",
+          "items": {"type": "object", "additionalProperties": false, "required": ["need", "unlocks_routes"],
+                    "properties": {"need": {"type": "string"}, "unlocks_routes": {"type": "integer", "minimum": 1}}}
+        }
+      }
+    },
+    "next_actions": {
+      "description": "Hops that can run now, ranked by how much of the plan they move. Dedupes the same call shared by many routes.",
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["connector", "method", "inputs", "unlocks_routes", "value"],
+        "properties": {
+          "connector": {"type": "string"},
+          "method": {"type": "string"},
+          "inputs": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/nodeKey"}},
+          "unlocks_routes": {"type": "array", "items": {"type": "string"}},
+          "value": {"type": "number", "minimum": 0, "description": "Sum of the success chances of the routes this call advances, per query of cost."}
+        }
+      }
+    },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "rank", "status", "p_success", "remaining_cost", "independence_groups", "hops"],
+        "properties": {
+          "id": {"type": "string", "description": "Stable hash of the hop sequence; survives re-planning."},
+          "rank": {"type": "integer", "minimum": 1},
+          "status": {"$ref": "#/$defs/routeStatus"},
+          "p_success": {"type": "number", "minimum": 0, "maximum": 1,
+                        "description": "Product of hit rates of the hops not yet confirmed. 1 when completed, 0 when dead."},
+          "remaining_cost": {
+            "type": "object", "additionalProperties": false, "required": ["queries", "expected_ms"],
+            "properties": {"queries": {"type": "integer", "minimum": 0}, "expected_ms": {"type": "integer", "minimum": 0}}
+          },
+          "independence_groups": {"type": "array", "items": {"type": "string"}},
+          "needs": {"type": "array", "items": {"type": "string"}, "description": "What would unblock this route (collection, config, policy)."},
+          "corroborates": {"type": "boolean", "description": "False when every source on this route is already in a completed route, so finishing it adds no independent evidence."},
+          "hops": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/hop"}}
+        }
+      }
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["route", "to", "because"],
+        "properties": {
+          "route": {"type": "string"},
+          "from": {"type": ["string", "null"]},
+          "to": {"type": "string"},
+          "rank_from": {"type": ["integer", "null"]},
+          "rank_to": {"type": "integer"},
+          "because": {"type": "string"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "routeStatus": {"enum": ["completed", "in_progress", "viable", "blocked", "needs_collection", "dead"]},
+    "hop": {
+      "type": "object", "additionalProperties": false,
+      "required": ["n", "connector", "method", "from_form", "to_form", "status", "p_hit"],
+      "properties": {
+        "n": {"type": "integer", "minimum": 1},
+        "connector": {"type": "string"},
+        "method": {"type": "string"},
+        "from_form": {"$ref": "common.schema.json#/$defs/form"},
+        "to_form": {"$ref": "common.schema.json#/$defs/form"},
+        "status": {"enum": ["pending", "ready", "confirmed", "denied", "pruned", "error", "blocked", "needs_collection"]},
+        "p_hit": {"type": "number", "minimum": 0, "maximum": 1},
+        "p_source": {"enum": ["seed", "measured"]},
+        "bound_inputs": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/nodeKey"}},
+        "results": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/nodeKey"}},
+        "evidence": {"type": "array", "items": {"type": "string"}, "description": "Batch fingerprints that decided this hop."},
+        "reason": {"type": "string"},
+        "needs": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ gaps:
   - "Resolved answers are not a column; ipv4<-fqdn resolution needs json_extract on ocsf_json."
 methods:
   - name: host_queried_fqdn
+    prior_hit_rate: 0.7   # seed guess; replaced by measured rate
     description: Domains an internal host looked up in the window.
     accepts: [inet:ipv4]
     emits: {forms: [inet:fqdn], verbs: [queried]}
@@ -26,6 +27,7 @@ methods:
         WHERE src_endpoint_ip = :ip AND time BETWEEN :start AND :end
         GROUP BY query_hostname
   - name: fqdn_queried_by
+    prior_hit_rate: 0.5   # seed guess; replaced by measured rate
     description: Internal hosts that looked up a domain (and therefore its prevalence).
     accepts: [inet:fqdn]
     emits: {forms: [inet:ipv4], verbs: [queried]}

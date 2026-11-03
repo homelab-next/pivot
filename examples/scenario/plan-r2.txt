@@ -1,0 +1,24 @@
+plan r2 (steps 3-4): 106 routes blocked 60, completed 1, dead 1, in_progress 5, viable 39
+  goal reached via independent groups: own-network-capture, synapse-mixed
+would unlock more routes:
+  ◌ allow external egress  (60 route(s))
+changes:
+  r-755b734d99 viable -> completed (rank 10 -> 1): hop 1 lake.network/sni_for_ip confirmed; hop 2 synapse/tags_for confirmed
+  r-6eeb2ed3d9 viable -> in_progress (rank 34 -> 18): hop 1 lake.network/sni_for_ip confirmed
+  r-e5cc8aaa97 viable -> in_progress (rank 35 -> 19): hop 1 lake.network/sni_for_ip confirmed
+next:
+  ▶ lake.honeypot/sessions_for_ip(203.0.113.7)  advances 6 route(s), value 0.792
+  ▶ synapse/neighbours(203.0.113.7)  advances 18 route(s), value 0.54
+  ▶ synapse/neighbours(ec7378c1a92f5a8dde7e8b7a1ddf33d1)  advances 3 route(s), value 0.54
+  ▶ corpus/documents_mentioning(203.0.113.7)  advances 3 route(s), value 0.162
+  ▶ lake.http/http_by_host(203.0.113.7)  advances 6 route(s), value 0.132
+routes:
+  #1   completed        p=1.0    r-755b734d99 inet:ipv4 ─✔ lake.network/sni_for_ip→ inet:fqdn ─✔ synapse/tags_for→ syn:tag
+  #2   viable           p=0.18   r-34b2eb31b0 inet:ipv4 ─▶ lake.honeypot/sessions_for_ip→ inet:url ─· synapse/tags_for→ syn:tag
+  #3   viable           p=0.18   r-b5571a8b1e inet:ipv4 ─▶ lake.honeypot/sessions_for_ip→ hash:sha256 ─· synapse/tags_for→ syn:tag
+  #4   in_progress      p=0.18   r-0ae3226da6 inet:ipv4 ─✔ lake.honeypot/hassh_for_ip→ hash:md5 ─▶ synapse/neighbours→ inet:url ─· synapse/tags_for→ syn:tag
+  #5   in_progress      p=0.18   r-10ac8c8743 inet:ipv4 ─✔ lake.honeypot/hassh_for_ip→ hash:md5 ─▶ synapse/neighbours→ hash:sha256 ─· synapse/tags_for→ syn:tag
+  #6   in_progress      p=0.18   r-8a0be599ed inet:ipv4 ─✔ lake.honeypot/hassh_for_ip→ hash:md5 ─▶ synapse/neighbours→ inet:fqdn ─· synapse/tags_for→ syn:tag
+  #7   viable           p=0.108  r-3308090dc3 inet:ipv4 ─▶ lake.honeypot/sessions_for_ip→ hash:sha256 ─· synapse/neighbours→ inet:url ─· synapse/tags_for→ syn:tag
+  #8   viable           p=0.108  r-3a788ea232 inet:ipv4 ─▶ lake.honeypot/sessions_for_ip→ inet:url ─· synapse/neighbours→ inet:fqdn ─· synapse/tags_for→ syn:tag
+  #9   viable           p=0.108  r-49a2b48e1e inet:ipv4 ─▶ lake.honeypot/sessions_for_ip→ hash:sha256 ─· synapse/neighbours→ inet:fqdn ─· synapse/tags_for→ syn:tag

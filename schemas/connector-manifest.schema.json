@@ -51,6 +51,12 @@
           },
           "max_results": {"type": "integer", "minimum": 1},
           "computes_prevalence": {"type": "boolean", "default": false},
+          "availability": {"enum": ["available", "planned", "unavailable"], "default": "available",
+                           "description": "planned/unavailable methods still enter the catalog so the planner can show routes that need them."},
+          "needs": {"type": "array", "items": {"type": "string"},
+                    "description": "What must change for this method to work (collection or config). Required unless available."},
+          "prior_hit_rate": {"type": "number", "minimum": 0, "maximum": 1,
+                             "description": "Chance a call returns at least one unpruned result. Seed value; the planner replaces it with the rate measured from step logs."},
           "implementation": {"type": "object", "description": "Kind-specific: SQL template, Storm query, API path, etc."}
         }
       }

@@ -14,6 +14,7 @@ gaps:
   - "inet:http:cookie has no inbound property pivots in the 2.247.0 model"
 methods:
   - name: neighbours
+    prior_hit_rate: 0.6   # seed guess; replaced by measured rate
     description: All property pivots and light edges, both directions, one hop.
     accepts: [inet:ipv4, inet:ipv6, inet:fqdn, inet:url, hash:sha256, hash:md5, hash:sha1, inet:email, inet:tls:ja4, risk:threat, risk:tool:software, ou:campaign]
     emits: {forms: [inet:ipv4, inet:fqdn, inet:url, hash:sha256, inet:dns:a, risk:threat, risk:tool:software, ou:campaign, it:mitre:attack:technique, risk:vuln, meta:source], verbs: [uses, refs, exploits, seen]}
@@ -23,6 +24,7 @@ methods:
     max_results: 500
     implementation: {storm: "$n = $lib.pivot.input() $n | tee { -> * } { <- * } { -(*)> * } { <(*)- * }"}
   - name: tags_for
+    prior_hit_rate: 0.3   # seed guess; replaced by measured rate
     description: Reputation and assessment tags on a node (#rep.*, #cno.*, #cti.conf.*, #tlp.*).
     accepts: [inet:ipv4, inet:fqdn, inet:url, hash:sha256]
     emits: {forms: [syn:tag]}

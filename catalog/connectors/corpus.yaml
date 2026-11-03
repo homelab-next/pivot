@@ -11,6 +11,7 @@ independence_group: per-document-publisher   # resolved per document at runtime
 handling: {default_tlp: green}
 methods:
   - name: documents_mentioning
+    prior_hit_rate: 0.2   # seed guess; replaced by measured rate
     accepts: [inet:ipv4, inet:fqdn, inet:url, hash:sha256, risk:vuln, risk:threat, risk:tool:software, inet:tls:ja4]
     emits: {forms: [media:news], verbs: [refs]}
     interaction: passive
@@ -18,6 +19,7 @@ methods:
     cost: {queries: 1, expected_ms: 500}
     max_results: 200
   - name: entities_in_document
+    prior_hit_rate: 0.9   # seed guess; replaced by measured rate
     accepts: [media:news]
     emits: {forms: [inet:ipv4, inet:fqdn, inet:url, hash:sha256, risk:vuln, risk:threat, risk:tool:software, it:mitre:attack:technique], verbs: [refs]}
     interaction: passive

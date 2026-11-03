@@ -21,6 +21,7 @@ EXAMPLES = {
     "observation-batch": "observation-batch.schema.json",
     "investigation": "investigation.schema.json",
     "assessment": "assessment.schema.json",
+    "plan": "plan.schema.json",
 }
 
 
@@ -55,12 +56,16 @@ def main() -> int:
             errs.append(f"duplicate connector id {doc['id']}")
         ids.add(doc.get("id"))
         for m in doc.get("methods", []):
+            if m.get("availability", "available") != "available" and not m.get("needs"):
+                errs.append(f"method {m['name']}: availability {m['availability']} requires 'needs'")
             for f in m.get("accepts", []) + m.get("emits", {}).get("forms", []):
                 if f not in forms and not f.startswith("_pivot:"):
                     errs.append(f"method {m['name']}: unknown Synapse form {f}")
         bad += report(p, errs)
-    for p in sorted((ROOT / "examples").glob("*.json")):
+    for p in sorted((ROOT / "examples").rglob("*.json")):
         kind = next((k for k in EXAMPLES if p.name.startswith(k)), None)
+        if kind is None and p.parent.name == "batches":
+            kind = "observation-batch"
         if kind is None:
             bad += report(p, ["example name must start with one of " + ", ".join(EXAMPLES)])
             continue

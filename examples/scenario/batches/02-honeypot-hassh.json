@@ -1,0 +1,61 @@
+{
+ "schema": "pivot.observation-batch/1",
+ "connector": {
+  "id": "lake.honeypot",
+  "version": "0.1.0",
+  "method": "hassh_for_ip"
+ },
+ "request": {
+  "inputs": [
+   {
+    "form": "inet:ipv4",
+    "value": "203.0.113.7"
+   }
+  ],
+  "window": {
+   "start": "2026-10-04T00:00:00Z",
+   "end": "2026-11-03T00:00:00Z"
+  },
+  "fingerprint": "sha256:2e4a31d2b4bba0b21834089bf6dfc6938a5133bbaa2275206b6bbad4e306a8a7"
+ },
+ "executed_at": "2026-11-03T17:00:05Z",
+ "stats": {
+  "rows_scanned": null,
+  "results": 1,
+  "truncated": false,
+  "duration_ms": 900,
+  "queries": 1
+ },
+ "nodes": [
+  {
+   "ref": "n0",
+   "form": "hash:md5",
+   "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+  }
+ ],
+ "edges": [
+  {
+   "n1": {
+    "form": "inet:ipv4",
+    "value": "203.0.113.7"
+   },
+   "verb": "refs",
+   "n2": {
+    "ref": "n0"
+   }
+  }
+ ],
+ "evidence": [
+  {
+   "ref": "n0",
+   "source_record": {
+    "system": "example",
+    "locator": "02-honeypot-hassh"
+   }
+  }
+ ],
+ "handling": {
+  "tlp": "amber"
+ },
+ "errors": []
+}

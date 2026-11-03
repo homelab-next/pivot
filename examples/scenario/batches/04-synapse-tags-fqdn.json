@@ -1,0 +1,83 @@
+{
+ "schema": "pivot.observation-batch/1",
+ "connector": {
+  "id": "synapse",
+  "version": "0.1.0",
+  "method": "tags_for"
+ },
+ "request": {
+  "inputs": [
+   {
+    "form": "inet:fqdn",
+    "value": "cdn-update.example"
+   }
+  ],
+  "window": {
+   "start": "2026-10-04T00:00:00Z",
+   "end": "2026-11-03T00:00:00Z"
+  },
+  "fingerprint": "sha256:eaee7e5a3262d38c34c16dc3b8a3ce47da7d0147c36abe132d514346327d9707"
+ },
+ "executed_at": "2026-11-03T17:00:12Z",
+ "stats": {
+  "rows_scanned": null,
+  "results": 2,
+  "truncated": false,
+  "duration_ms": 900,
+  "queries": 1
+ },
+ "nodes": [
+  {
+   "ref": "n0",
+   "form": "syn:tag",
+   "value": "cno.threat.crm.example_cluster"
+  },
+  {
+   "ref": "n1",
+   "form": "syn:tag",
+   "value": "rep.misp"
+  }
+ ],
+ "edges": [
+  {
+   "n1": {
+    "form": "inet:fqdn",
+    "value": "cdn-update.example"
+   },
+   "verb": "refs",
+   "n2": {
+    "ref": "n0"
+   }
+  },
+  {
+   "n1": {
+    "form": "inet:fqdn",
+    "value": "cdn-update.example"
+   },
+   "verb": "refs",
+   "n2": {
+    "ref": "n1"
+   }
+  }
+ ],
+ "evidence": [
+  {
+   "ref": "n0",
+   "source_record": {
+    "system": "example",
+    "locator": "04-synapse-tags-fqdn"
+   }
+  },
+  {
+   "ref": "n1",
+   "source_record": {
+    "system": "example",
+    "locator": "04-synapse-tags-fqdn"
+   }
+  }
+ ],
+ "handling": {
+  "tlp": "amber"
+ },
+ "errors": []
+}

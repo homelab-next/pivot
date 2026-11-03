@@ -76,6 +76,21 @@
         }
       }
     },
-    "assessments": {"type": "array", "items": {"type": "string"}, "description": "Assessment ids."}
+    "assessments": {"type": "array", "items": {"type": "string"}, "description": "Assessment ids."},
+    "plan_revisions": {
+      "description": "Every route-plan revision (pivot.plan/1), one per step or batch of steps. The latest is the current plan.",
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["revision", "at", "trigger", "ref"],
+        "properties": {
+          "revision": {"type": "integer", "minimum": 0},
+          "at": {"type": "string", "format": "date-time"},
+          "trigger": {"type": "string"},
+          "ref": {"type": "string", "description": "Where the full plan document is stored."},
+          "by_status": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+          "best_route": {"type": ["string", "null"]}
+        }
+      }
+    }
   }
 }

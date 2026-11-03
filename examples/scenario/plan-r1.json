@@ -1,0 +1,6166 @@
+{
+ "schema": "pivot.plan/1",
+ "revision": 1,
+ "generated_at": "2026-11-03T16:26:41Z",
+ "trigger": "steps 1-2",
+ "seeds": [
+  {
+   "form": "inet:ipv4",
+   "value": "203.0.113.7"
+  }
+ ],
+ "goal": {
+  "forms": [
+   "syn:tag"
+  ],
+  "tag_prefix": "cno.threat"
+ },
+ "policy": {
+  "max_hops": 3,
+  "allow_external_egress": false,
+  "allow_active": false,
+  "max_routes": 200
+ },
+ "summary": {
+  "routes": 106,
+  "routes_truncated": false,
+  "by_status": {
+   "viable": 42,
+   "in_progress": 3,
+   "blocked": 60,
+   "dead": 1
+  },
+  "independent_groups_completed": [],
+  "requirements": [
+   {
+    "need": "allow external egress",
+    "unlocks_routes": 60
+   }
+  ],
+  "best_route": "r-3f3e2fe3fa"
+ },
+ "next_actions": [
+  {
+   "connector": "synapse",
+   "method": "neighbours",
+   "inputs": [
+    {
+     "form": "inet:ipv4",
+     "value": "203.0.113.7"
+    }
+   ],
+   "unlocks_routes": [
+    "r-223bee1d3f",
+    "r-49e6ce89a7",
+    "r-acaa66216f",
+    "r-0046ee5b1a",
+    "r-0c7f1168b8",
+    "r-44b45b23f6",
+    "r-45a9347a07",
+    "r-6f7347416a",
+    "r-88dac3423a",
+    "r-99450679c2",
+    "r-9efe1f1931",
+    "r-b036351008",
+    "r-bc10bf5aba",
+    "r-c79fc86d4c",
+    "r-dd31106a44",
+    "r-e721c3bbdb",
+    "r-ef9c2ad9b0",
+    "r-f648effecb"
+   ],
+   "value": 2.16
+  },
+  {
+   "connector": "lake.honeypot",
+   "method": "sessions_for_ip",
+   "inputs": [
+    {
+     "form": "inet:ipv4",
+     "value": "203.0.113.7"
+    }
+   ],
+   "unlocks_routes": [
+    "r-34b2eb31b0",
+    "r-b5571a8b1e",
+    "r-3308090dc3",
+    "r-3a788ea232",
+    "r-49a2b48e1e",
+    "r-a75d935228"
+   ],
+   "value": 0.792
+  },
+  {
+   "connector": "synapse",
+   "method": "neighbours",
+   "inputs": [
+    {
+     "form": "hash:md5",
+     "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    }
+   ],
+   "unlocks_routes": [
+    "r-0ae3226da6",
+    "r-10ac8c8743",
+    "r-8a0be599ed"
+   ],
+   "value": 0.54
+  },
+  {
+   "connector": "lake.http",
+   "method": "http_by_host",
+   "inputs": [
+    {
+     "form": "inet:ipv4",
+     "value": "203.0.113.7"
+    }
+   ],
+   "unlocks_routes": [
+    "r-b946a17bb1",
+    "r-f518c91925",
+    "r-a8178a7e15",
+    "r-ad1be0eab3",
+    "r-b96f62804a",
+    "r-dea1a89e15"
+   ],
+   "value": 0.528
+  },
+  {
+   "connector": "lake.dns",
+   "method": "host_queried_fqdn",
+   "inputs": [
+    {
+     "form": "inet:ipv4",
+     "value": "203.0.113.7"
+    }
+   ],
+   "unlocks_routes": [
+    "r-3f3e2fe3fa",
+    "r-4746cff21c",
+    "r-6ac41d8f63"
+   ],
+   "value": 0.462
+  },
+  {
+   "connector": "lake.network",
+   "method": "sni_for_ip",
+   "inputs": [
+    {
+     "form": "inet:ipv4",
+     "value": "203.0.113.7"
+    }
+   ],
+   "unlocks_routes": [
+    "r-755b734d99",
+    "r-6eeb2ed3d9",
+    "r-e5cc8aaa97"
+   ],
+   "value": 0.33
+  },
+  {
+   "connector": "lake.network",
+   "method": "ja4_for_ip",
+   "inputs": [
+    {
+     "form": "inet:ipv4",
+     "value": "203.0.113.7"
+    }
+   ],
+   "unlocks_routes": [
+    "r-1da11eac64",
+    "r-406c49e08c",
+    "r-93d7a33bc9"
+   ],
+   "value": 0.216
+  },
+  {
+   "connector": "corpus",
+   "method": "documents_mentioning",
+   "inputs": [
+    {
+     "form": "inet:ipv4",
+     "value": "203.0.113.7"
+    }
+   ],
+   "unlocks_routes": [
+    "r-0bce8689e4",
+    "r-c26c9bea25",
+    "r-da31fa496d"
+   ],
+   "value": 0.162
+  }
+ ],
+ "routes": [
+  {
+   "id": "r-3f3e2fe3fa",
+   "rank": 1,
+   "status": "viable",
+   "p_success": 0.21,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 1600
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.dns",
+     "method": "host_queried_fqdn",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-223bee1d3f",
+   "rank": 2,
+   "status": "viable",
+   "p_success": 0.18,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 400
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-34b2eb31b0",
+   "rank": 3,
+   "status": "viable",
+   "p_success": 0.18,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 1600
+   },
+   "independence_groups": [
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-49e6ce89a7",
+   "rank": 4,
+   "status": "viable",
+   "p_success": 0.18,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 400
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-acaa66216f",
+   "rank": 5,
+   "status": "viable",
+   "p_success": 0.18,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 400
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-b5571a8b1e",
+   "rank": 6,
+   "status": "viable",
+   "p_success": 0.18,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 1600
+   },
+   "independence_groups": [
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-0ae3226da6",
+   "rank": 7,
+   "status": "in_progress",
+   "p_success": 0.18,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 400
+   },
+   "independence_groups": [
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "hassh_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:md5",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "evidence": [
+      "sha256:2e4a31d2b4bba0b21834089bf6dfc6938a5133bbaa2275206b6bbad4e306a8a7"
+     ],
+     "status": "confirmed",
+     "results": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:md5",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-10ac8c8743",
+   "rank": 8,
+   "status": "in_progress",
+   "p_success": 0.18,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 400
+   },
+   "independence_groups": [
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "hassh_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:md5",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "evidence": [
+      "sha256:2e4a31d2b4bba0b21834089bf6dfc6938a5133bbaa2275206b6bbad4e306a8a7"
+     ],
+     "status": "confirmed",
+     "results": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:md5",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-8a0be599ed",
+   "rank": 9,
+   "status": "in_progress",
+   "p_success": 0.18,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 400
+   },
+   "independence_groups": [
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "hassh_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:md5",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "evidence": [
+      "sha256:2e4a31d2b4bba0b21834089bf6dfc6938a5133bbaa2275206b6bbad4e306a8a7"
+     ],
+     "status": "confirmed",
+     "results": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:md5",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-755b734d99",
+   "rank": 10,
+   "status": "viable",
+   "p_success": 0.15,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 2100
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "sni_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-4746cff21c",
+   "rank": 11,
+   "status": "viable",
+   "p_success": 0.126,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 1900
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.dns",
+     "method": "host_queried_fqdn",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-6ac41d8f63",
+   "rank": 12,
+   "status": "viable",
+   "p_success": 0.126,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 1900
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.dns",
+     "method": "host_queried_fqdn",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-b946a17bb1",
+   "rank": 13,
+   "status": "viable",
+   "p_success": 0.12,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 2100
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-f518c91925",
+   "rank": 14,
+   "status": "viable",
+   "p_success": 0.12,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 2100
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-0046ee5b1a",
+   "rank": 15,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-0c7f1168b8",
+   "rank": 16,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:threat",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:threat",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-3308090dc3",
+   "rank": 17,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 1900
+   },
+   "independence_groups": [
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:sha256",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-3a788ea232",
+   "rank": 18,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 1900
+   },
+   "independence_groups": [
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-44b45b23f6",
+   "rank": 19,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "ou:campaign",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "ou:campaign",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-45a9347a07",
+   "rank": 20,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-49a2b48e1e",
+   "rank": 21,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 1900
+   },
+   "independence_groups": [
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:sha256",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-6f7347416a",
+   "rank": 22,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:threat",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:threat",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-88dac3423a",
+   "rank": 23,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:sha256",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-99450679c2",
+   "rank": 24,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "ou:campaign",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "ou:campaign",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-9efe1f1931",
+   "rank": 25,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-a75d935228",
+   "rank": 26,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 1900
+   },
+   "independence_groups": [
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-b036351008",
+   "rank": 27,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "ou:campaign",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "ou:campaign",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-bc10bf5aba",
+   "rank": 28,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-c79fc86d4c",
+   "rank": 29,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:sha256",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-dd31106a44",
+   "rank": 30,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:threat",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:threat",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-e721c3bbdb",
+   "rank": 31,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:tool:software",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:tool:software",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-ef9c2ad9b0",
+   "rank": 32,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:tool:software",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:tool:software",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-f648effecb",
+   "rank": 33,
+   "status": "viable",
+   "p_success": 0.108,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 700
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:tool:software",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:tool:software",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-6eeb2ed3d9",
+   "rank": 34,
+   "status": "viable",
+   "p_success": 0.09,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 2400
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "sni_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-e5cc8aaa97",
+   "rank": 35,
+   "status": "viable",
+   "p_success": 0.09,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 2400
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "sni_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-1da11eac64",
+   "rank": 36,
+   "status": "viable",
+   "p_success": 0.072,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 15400
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "ja4_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:tls:ja4",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:tls:ja4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-406c49e08c",
+   "rank": 37,
+   "status": "viable",
+   "p_success": 0.072,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 15400
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "ja4_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:tls:ja4",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:tls:ja4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-93d7a33bc9",
+   "rank": 38,
+   "status": "viable",
+   "p_success": 0.072,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 15400
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "ja4_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:tls:ja4",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:tls:ja4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-a8178a7e15",
+   "rank": 39,
+   "status": "viable",
+   "p_success": 0.072,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 2400
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-ad1be0eab3",
+   "rank": 40,
+   "status": "viable",
+   "p_success": 0.072,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 2400
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-b96f62804a",
+   "rank": 41,
+   "status": "viable",
+   "p_success": 0.072,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 2400
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-dea1a89e15",
+   "rank": 42,
+   "status": "viable",
+   "p_success": 0.072,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 2400
+   },
+   "independence_groups": [
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-0bce8689e4",
+   "rank": 43,
+   "status": "viable",
+   "p_success": 0.054,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 1100
+   },
+   "independence_groups": [
+    "per-document-publisher",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "corpus",
+     "method": "documents_mentioning",
+     "from_form": "inet:ipv4",
+     "to_form": "media:news",
+     "p_hit": 0.2,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "corpus",
+     "method": "entities_in_document",
+     "from_form": "media:news",
+     "to_form": "inet:url",
+     "p_hit": 0.9,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-c26c9bea25",
+   "rank": 44,
+   "status": "viable",
+   "p_success": 0.054,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 1100
+   },
+   "independence_groups": [
+    "per-document-publisher",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "corpus",
+     "method": "documents_mentioning",
+     "from_form": "inet:ipv4",
+     "to_form": "media:news",
+     "p_hit": 0.2,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "corpus",
+     "method": "entities_in_document",
+     "from_form": "media:news",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.9,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-da31fa496d",
+   "rank": 45,
+   "status": "viable",
+   "p_success": 0.054,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 1100
+   },
+   "independence_groups": [
+    "per-document-publisher",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "corpus",
+     "method": "documents_mentioning",
+     "from_form": "inet:ipv4",
+     "to_form": "media:news",
+     "p_hit": 0.2,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "corpus",
+     "method": "entities_in_document",
+     "from_form": "media:news",
+     "to_form": "hash:sha256",
+     "p_hit": 0.9,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-fb1fb484ec",
+   "rank": 46,
+   "status": "blocked",
+   "p_success": 0.7,
+   "remaining_cost": {
+    "queries": 1,
+    "expected_ms": 30000
+   },
+   "independence_groups": [
+    "external-reputation"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:ipv4",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-643ca131f1",
+   "rank": 47,
+   "status": "blocked",
+   "p_success": 0.49,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 31500
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.dns",
+     "method": "host_queried_fqdn",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-496a728a9b",
+   "rank": 48,
+   "status": "blocked",
+   "p_success": 0.42,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 30300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-58fdc80cac",
+   "rank": 49,
+   "status": "blocked",
+   "p_success": 0.42,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 30300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-b8de9b2afe",
+   "rank": 50,
+   "status": "blocked",
+   "p_success": 0.42,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 30300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-fd9262ae9d",
+   "rank": 51,
+   "status": "blocked",
+   "p_success": 0.42,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 31500
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-fdd6b5ca17",
+   "rank": 52,
+   "status": "blocked",
+   "p_success": 0.42,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 31500
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-408b7c9b8a",
+   "rank": 53,
+   "status": "blocked",
+   "p_success": 0.42,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 30300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "hassh_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:md5",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "evidence": [
+      "sha256:2e4a31d2b4bba0b21834089bf6dfc6938a5133bbaa2275206b6bbad4e306a8a7"
+     ],
+     "status": "confirmed",
+     "results": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:md5",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-80a135c943",
+   "rank": 54,
+   "status": "blocked",
+   "p_success": 0.42,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 30300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "hassh_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:md5",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "evidence": [
+      "sha256:2e4a31d2b4bba0b21834089bf6dfc6938a5133bbaa2275206b6bbad4e306a8a7"
+     ],
+     "status": "confirmed",
+     "results": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:md5",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-ee8b115f9c",
+   "rank": 55,
+   "status": "blocked",
+   "p_success": 0.42,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 30300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "hassh_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:md5",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "evidence": [
+      "sha256:2e4a31d2b4bba0b21834089bf6dfc6938a5133bbaa2275206b6bbad4e306a8a7"
+     ],
+     "status": "confirmed",
+     "results": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:md5",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "hash:md5",
+       "value": "ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-4b462d79e4",
+   "rank": 56,
+   "status": "blocked",
+   "p_success": 0.35,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 32000
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "sni_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-13185f6b34",
+   "rank": 57,
+   "status": "blocked",
+   "p_success": 0.294,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 31800
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.dns",
+     "method": "host_queried_fqdn",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-7510a0a7e6",
+   "rank": 58,
+   "status": "blocked",
+   "p_success": 0.294,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 31800
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.dns",
+     "method": "host_queried_fqdn",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-0ae506bd1b",
+   "rank": 59,
+   "status": "blocked",
+   "p_success": 0.28,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 32000
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-a3393d9a8b",
+   "rank": 60,
+   "status": "blocked",
+   "p_success": 0.28,
+   "remaining_cost": {
+    "queries": 2,
+    "expected_ms": 32000
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-156d00ad65",
+   "rank": 61,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "ou:campaign",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "ou:campaign",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-18c7a8e13d",
+   "rank": 62,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 31800
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-50128436d0",
+   "rank": 63,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:threat",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:threat",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-5f27b54928",
+   "rank": 64,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-610a987b48",
+   "rank": 65,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:threat",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:threat",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-62e5a79e3a",
+   "rank": 66,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-6bb9252748",
+   "rank": 67,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "ou:campaign",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "ou:campaign",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-6c584950a7",
+   "rank": 68,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:tool:software",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:tool:software",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-81d127418c",
+   "rank": 69,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-85b241c10f",
+   "rank": 70,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 31800
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-928f80d1eb",
+   "rank": 71,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:sha256",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-a254a6b040",
+   "rank": 72,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 31800
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:sha256",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-aa282d7fa0",
+   "rank": 73,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:tool:software",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:tool:software",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-b0c43859e8",
+   "rank": 74,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:sha256",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-c3593c5ed2",
+   "rank": 75,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-cbb4c9baf7",
+   "rank": 76,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:threat",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:threat",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-ed0c945c1a",
+   "rank": 77,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 31800
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "hash:sha256",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-f404241ad3",
+   "rank": 78,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "risk:tool:software",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "risk:tool:software",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-fabb54f4f9",
+   "rank": 79,
+   "status": "blocked",
+   "p_success": 0.252,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 30600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "ou:campaign",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "ou:campaign",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-1a62c13d38",
+   "rank": 80,
+   "status": "blocked",
+   "p_success": 0.245,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 91500
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.dns",
+     "method": "host_queried_fqdn",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-09dab010ca",
+   "rank": 81,
+   "status": "blocked",
+   "p_success": 0.21,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 32300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "sni_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-1ca844597e",
+   "rank": 82,
+   "status": "blocked",
+   "p_success": 0.21,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 90300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-5b9d22fca2",
+   "rank": 83,
+   "status": "blocked",
+   "p_success": 0.21,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 90300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-68da3eac6f",
+   "rank": 84,
+   "status": "blocked",
+   "p_success": 0.21,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 32300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "sni_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-e6f47b7de5",
+   "rank": 85,
+   "status": "blocked",
+   "p_success": 0.21,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 91500
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-add07f1e76",
+   "rank": 86,
+   "status": "blocked",
+   "p_success": 0.175,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 92000
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "sni_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-1ad78f523f",
+   "rank": 87,
+   "status": "blocked",
+   "p_success": 0.168,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 32300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-2c994ea231",
+   "rank": 88,
+   "status": "blocked",
+   "p_success": 0.168,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 32300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-3081114e43",
+   "rank": 89,
+   "status": "blocked",
+   "p_success": 0.168,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 32300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-4abffe5506",
+   "rank": 90,
+   "status": "blocked",
+   "p_success": 0.168,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 45300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "ja4_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:tls:ja4",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:tls:ja4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-600f7deb5d",
+   "rank": 91,
+   "status": "blocked",
+   "p_success": 0.168,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 45300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "ja4_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:tls:ja4",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:tls:ja4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-652172c790",
+   "rank": 92,
+   "status": "blocked",
+   "p_success": 0.168,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 32300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-65b8820552",
+   "rank": 93,
+   "status": "blocked",
+   "p_success": 0.168,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 45300
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "ja4_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:tls:ja4",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:tls:ja4",
+     "to_form": "hash:sha256",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-5f1afa3016",
+   "rank": 94,
+   "status": "blocked",
+   "p_success": 0.14,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 92000
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-86b05e841f",
+   "rank": 95,
+   "status": "blocked",
+   "p_success": 0.14,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 92000
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-015f7967c6",
+   "rank": 96,
+   "status": "blocked",
+   "p_success": 0.126,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 31000
+   },
+   "independence_groups": [
+    "external-reputation",
+    "per-document-publisher"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "corpus",
+     "method": "documents_mentioning",
+     "from_form": "inet:ipv4",
+     "to_form": "media:news",
+     "p_hit": 0.2,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "corpus",
+     "method": "entities_in_document",
+     "from_form": "media:news",
+     "to_form": "hash:sha256",
+     "p_hit": 0.9,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-273425812f",
+   "rank": 97,
+   "status": "blocked",
+   "p_success": 0.126,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 31000
+   },
+   "independence_groups": [
+    "external-reputation",
+    "per-document-publisher"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "corpus",
+     "method": "documents_mentioning",
+     "from_form": "inet:ipv4",
+     "to_form": "media:news",
+     "p_hit": 0.2,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "corpus",
+     "method": "entities_in_document",
+     "from_form": "media:news",
+     "to_form": "inet:url",
+     "p_hit": 0.9,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:url",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-30a265eb84",
+   "rank": 98,
+   "status": "blocked",
+   "p_success": 0.126,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 31000
+   },
+   "independence_groups": [
+    "external-reputation",
+    "per-document-publisher"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "corpus",
+     "method": "documents_mentioning",
+     "from_form": "inet:ipv4",
+     "to_form": "media:news",
+     "p_hit": 0.2,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "corpus",
+     "method": "entities_in_document",
+     "from_form": "media:news",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.9,
+     "p_source": "seed",
+     "status": "pending"
+    },
+    {
+     "n": 3,
+     "connector": "intelowl",
+     "method": "reputation_passive",
+     "from_form": "inet:fqdn",
+     "to_form": "syn:tag",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-c2a733546e",
+   "rank": 99,
+   "status": "blocked",
+   "p_success": 0.105,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 61600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.dns",
+     "method": "host_queried_fqdn",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.7,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-13dcf90854",
+   "rank": 100,
+   "status": "blocked",
+   "p_success": 0.09,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 61600
+   },
+   "independence_groups": [
+    "external-reputation",
+    "honeypot",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.honeypot",
+     "method": "sessions_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-718bf0cfb0",
+   "rank": 101,
+   "status": "blocked",
+   "p_success": 0.09,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 60400
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-ea554400d4",
+   "rank": 102,
+   "status": "blocked",
+   "p_success": 0.09,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 60400
+   },
+   "independence_groups": [
+    "external-reputation",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "neighbours",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.6,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-270f52faf5",
+   "rank": 103,
+   "status": "blocked",
+   "p_success": 0.075,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 62100
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.network",
+     "method": "sni_for_ip",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-92eca4f60d",
+   "rank": 104,
+   "status": "blocked",
+   "p_success": 0.06,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 62100
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:url",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:url",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-e4b248f605",
+   "rank": 105,
+   "status": "blocked",
+   "p_success": 0.06,
+   "remaining_cost": {
+    "queries": 3,
+    "expected_ms": 62100
+   },
+   "independence_groups": [
+    "external-reputation",
+    "own-network-capture",
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "lake.http",
+     "method": "http_by_host",
+     "from_form": "inet:ipv4",
+     "to_form": "inet:fqdn",
+     "p_hit": 0.4,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "status": "ready"
+    },
+    {
+     "n": 2,
+     "connector": "intelowl",
+     "method": "url_fetch",
+     "from_form": "inet:fqdn",
+     "to_form": "hash:sha256",
+     "p_hit": 0.5,
+     "p_source": "seed",
+     "status": "blocked",
+     "reason": "external egress not allowed for this investigation",
+     "needs": [
+      "allow external egress"
+     ]
+    },
+    {
+     "n": 3,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "hash:sha256",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "status": "pending"
+    }
+   ],
+   "needs": [
+    "allow external egress"
+   ],
+   "corroborates": true
+  },
+  {
+   "id": "r-84417b0d64",
+   "rank": 106,
+   "status": "dead",
+   "p_success": 0.0,
+   "remaining_cost": {
+    "queries": 0,
+    "expected_ms": 0
+   },
+   "independence_groups": [
+    "synapse-mixed"
+   ],
+   "hops": [
+    {
+     "n": 1,
+     "connector": "synapse",
+     "method": "tags_for",
+     "from_form": "inet:ipv4",
+     "to_form": "syn:tag",
+     "p_hit": 0.3,
+     "p_source": "seed",
+     "bound_inputs": [
+      {
+       "form": "inet:ipv4",
+       "value": "203.0.113.7"
+      }
+     ],
+     "evidence": [
+      "sha256:cd7bac74d9200df58c6bfd5649b3108c6d1900d9476f9733fa54a19d742f81d0"
+     ],
+     "status": "denied",
+     "reason": "ran and found nothing matching the goal"
+    }
+   ],
+   "corroborates": true
+  }
+ ],
+ "changes": [
+  {
+   "route": "r-0ae3226da6",
+   "from": "viable",
+   "to": "in_progress",
+   "rank_from": 14,
+   "rank_to": 7,
+   "because": "hop 1 lake.honeypot/hassh_for_ip confirmed"
+  },
+  {
+   "route": "r-10ac8c8743",
+   "from": "viable",
+   "to": "in_progress",
+   "rank_from": 16,
+   "rank_to": 8,
+   "because": "hop 1 lake.honeypot/hassh_for_ip confirmed"
+  },
+  {
+   "route": "r-8a0be599ed",
+   "from": "viable",
+   "to": "in_progress",
+   "rank_from": 24,
+   "rank_to": 9,
+   "because": "hop 1 lake.honeypot/hassh_for_ip confirmed"
+  },
+  {
+   "route": "r-84417b0d64",
+   "from": "viable",
+   "to": "dead",
+   "rank_from": 1,
+   "rank_to": 106,
+   "because": "hop 1 synapse/tags_for denied (ran and found nothing matching the goal)"
+  }
+ ]
+}

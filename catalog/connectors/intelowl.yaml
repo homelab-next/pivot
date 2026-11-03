@@ -9,6 +9,7 @@ handling: {default_tlp: green}
 rate_limit: {per_minute: 10, concurrent: 1}
 methods:
   - name: reputation_passive
+    prior_hit_rate: 0.7   # seed guess; replaced by measured rate
     description: Keyless passive analyzers only (no analyzer that fetches the target).
     accepts: [inet:ipv4, inet:fqdn, inet:url, hash:sha256]
     emits: {forms: [syn:tag, inet:asn, inet:whois:rec, inet:dns:a], verbs: [refs]}
@@ -17,6 +18,7 @@ methods:
     cost: {queries: 1, expected_ms: 30000}
     max_results: 200
   - name: url_fetch
+    prior_hit_rate: 0.5   # seed guess; replaced by measured rate
     description: Analyzers that retrieve the target. The target can see us.
     accepts: [inet:url, inet:fqdn]
     emits: {forms: [hash:sha256, inet:ipv4, crypto:x509:cert]}

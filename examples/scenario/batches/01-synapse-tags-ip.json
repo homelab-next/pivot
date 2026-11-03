@@ -1,0 +1,36 @@
+{
+ "schema": "pivot.observation-batch/1",
+ "connector": {
+  "id": "synapse",
+  "version": "0.1.0",
+  "method": "tags_for"
+ },
+ "request": {
+  "inputs": [
+   {
+    "form": "inet:ipv4",
+    "value": "203.0.113.7"
+   }
+  ],
+  "window": {
+   "start": "2026-10-04T00:00:00Z",
+   "end": "2026-11-03T00:00:00Z"
+  },
+  "fingerprint": "sha256:cd7bac74d9200df58c6bfd5649b3108c6d1900d9476f9733fa54a19d742f81d0"
+ },
+ "executed_at": "2026-11-03T17:00:02Z",
+ "stats": {
+  "rows_scanned": null,
+  "results": 0,
+  "truncated": false,
+  "duration_ms": 900,
+  "queries": 1
+ },
+ "nodes": [],
+ "edges": [],
+ "evidence": [],
+ "handling": {
+  "tlp": "amber"
+ },
+ "errors": []
+}

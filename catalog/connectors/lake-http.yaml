@@ -10,6 +10,7 @@ gaps:
   - "No cookie column; Zeek does not log cookie values without a policy script, and HTTPS hides them."
 methods:
   - name: http_by_host
+    prior_hit_rate: 0.4   # seed guess; replaced by measured rate
     accepts: [inet:ipv4]
     emits: {forms: [inet:fqdn, inet:url, inet:http:request], verbs: [requested]}
     interaction: passive
@@ -25,6 +26,7 @@ methods:
         WHERE src_endpoint_ip = :ip AND time BETWEEN :start AND :end
         GROUP BY 1, 2, 3
   - name: hosts_by_user_agent
+    prior_hit_rate: 0.2   # seed guess; replaced by measured rate
     description: Who else sent this exact user agent (high prevalence for common browsers -- prune).
     accepts: [inet:http:request]
     emits: {forms: [inet:ipv4], verbs: [requested]}
@@ -33,3 +35,30 @@ methods:
     cost: {queries: 1, expected_ms: 3000}
     max_results: 500
     computes_prevalence: true
+  - name: hosts_by_cookie
+    prior_hit_rate: 0.3   # seed guess; replaced by measured rate
+    description: Every internal host that sent the same cookie value (session/tracking-ID reuse).
+    accepts: [inet:http:cookie]
+    emits: {forms: [inet:ipv4], verbs: [sent]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 3000}
+    max_results: 200
+    computes_prevalence: true
+    availability: planned
+    needs:
+      - "Zeek http.log cookie logging (policy script) on the sensors"
+      - "a cookie column in iceberg.ocsf.http_activity (ocsf_http_activity_writer.py)"
+      - "plaintext HTTP only; HTTPS cookies need endpoint/browser telemetry instead"
+  - name: cookies_for_host
+    prior_hit_rate: 0.4   # seed guess; replaced by measured rate
+    accepts: [inet:ipv4]
+    emits: {forms: [inet:http:cookie], verbs: [sent]}
+    interaction: passive
+    time_semantics: windowed
+    cost: {queries: 1, expected_ms: 3000}
+    max_results: 200
+    availability: planned
+    needs:
+      - "Zeek http.log cookie logging (policy script) on the sensors"
+      - "a cookie column in iceberg.ocsf.http_activity (ocsf_http_activity_writer.py)"

@@ -11,6 +11,7 @@ gaps:
   - "ja3/ja3s/ja4/ja4s live only inside ocsf_json (not columns): JA4 pivots are json_extract scans until promoted."
 methods:
   - name: counterparts
+    prior_hit_rate: 0.8   # seed guess; replaced by measured rate
     description: Aggregated flows (one row per src,dst,dst_port) for an address.
     accepts: [inet:ipv4]
     emits: {forms: [inet:ipv4, inet:flow], verbs: [communicated_with]}
@@ -27,6 +28,7 @@ methods:
         WHERE (src_endpoint_ip = :ip OR dst_endpoint_ip = :ip) AND time BETWEEN :start AND :end
         GROUP BY 1, 2, 3
   - name: sni_for_ip
+    prior_hit_rate: 0.5   # seed guess; replaced by measured rate
     accepts: [inet:ipv4]
     emits: {forms: [inet:fqdn], verbs: [served]}
     interaction: passive
@@ -40,6 +42,7 @@ methods:
         WHERE dst_endpoint_ip = :ip AND tls_server_name IS NOT NULL AND time BETWEEN :start AND :end
         GROUP BY 1
   - name: ja4_for_ip
+    prior_hit_rate: 0.4   # seed guess; replaced by measured rate
     description: Client TLS fingerprints seen from an address (slow until ja4 is a column).
     accepts: [inet:ipv4]
     emits: {forms: [inet:tls:ja4], verbs: [presented]}
@@ -49,6 +52,7 @@ methods:
     max_results: 100
     computes_prevalence: true
   - name: ips_for_ja4
+    prior_hit_rate: 0.3   # seed guess; replaced by measured rate
     description: Every address that presented a JA4 -- the tool/operator fingerprint pivot.
     accepts: [inet:tls:ja4]
     emits: {forms: [inet:ipv4], verbs: [presented]}

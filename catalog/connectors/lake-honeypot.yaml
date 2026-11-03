@@ -8,6 +8,7 @@ independence_group: honeypot
 handling: {default_tlp: amber}
 methods:
   - name: sessions_for_ip
+    prior_hit_rate: 0.6   # seed guess; replaced by measured rate
     accepts: [inet:ipv4]
     emits: {forms: [hash:sha256, inet:url, inet:user, inet:passwd], verbs: [used, downloaded]}
     interaction: passive
@@ -15,6 +16,7 @@ methods:
     cost: {queries: 1, expected_ms: 1500}
     max_results: 500
   - name: hassh_for_ip
+    prior_hit_rate: 0.6   # seed guess; replaced by measured rate
     description: SSH client fingerprints (stored as hash:md5 until an extended form exists).
     accepts: [inet:ipv4]
     emits: {forms: [hash:md5], verbs: [presented]}
@@ -23,6 +25,7 @@ methods:
     cost: {queries: 1, expected_ms: 1500}
     max_results: 50
   - name: ips_for_hassh
+    prior_hit_rate: 0.5   # seed guess; replaced by measured rate
     accepts: [hash:md5]
     emits: {forms: [inet:ipv4], verbs: [presented]}
     interaction: passive
@@ -31,6 +34,7 @@ methods:
     max_results: 500
     computes_prevalence: true
   - name: ips_for_command_fingerprint
+    prior_hit_rate: 0.4   # seed guess; replaced by measured rate
     description: Normalised command-sequence hash -> every IP that ran it (honeypot_report.normalize_command).
     accepts: [hash:sha256]
     emits: {forms: [inet:ipv4], verbs: [ran]}
