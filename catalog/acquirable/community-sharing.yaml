@@ -1,0 +1,41 @@
+schema: pivot.connector/1
+id: community-sharing
+version: 0.1.0
+title: ISAC / trust-group sharing
+tier: acquirable
+description: Other teams have often already attributed the cluster; a shared IOC gets you their conclusion
+  and their evidence.
+kind: api
+egress: external
+independence_group: peer-reporting
+handling:
+  default_tlp: amber
+acquisition:
+  path: membership
+  cost_band: $
+  examples:
+  - sector ISAC
+  - MISP communities
+  - FIRST
+  - vendor partner portals
+  lead_time: weeks
+methods:
+- name: artifact_to_reporting
+  description: Peers who already clustered or named the activity.
+  prior_hit_rate: 0.3
+  accepts:
+  - inet:ipv4
+  - inet:fqdn
+  - hash:sha256
+  - crypto:x509:cert
+  - inet:ssl:jarmhash
+  emits:
+    forms:
+    - risk:threat
+    - media:news
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

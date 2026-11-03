@@ -1,0 +1,48 @@
+schema: pivot.connector/1
+id: cert-transparency
+version: 0.1.0
+title: Certificate Transparency logs
+tier: acquirable
+description: Every public TLS cert is logged. Actors who use Let's Encrypt on fresh domains leave a timestamped
+  trail, often before the domain is used.
+kind: api
+egress: external
+independence_group: ct-logs
+handling:
+  default_tlp: amber
+acquisition:
+  path: free
+  cost_band: none
+  examples:
+  - crt.sh
+  - Censys CT search
+  - Google CT search
+  lead_time: minutes
+methods:
+- name: fqdn_to_certs
+  prior_hit_rate: 0.8
+  accepts:
+  - inet:fqdn
+  emits:
+    forms:
+    - crypto:x509:cert
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: cert_to_fqdns
+  description: Other names on the same cert, or issued in the same burst by the same account.
+  prior_hit_rate: 0.7
+  accepts:
+  - crypto:x509:cert
+  emits:
+    forms:
+    - inet:fqdn
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

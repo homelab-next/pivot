@@ -44,6 +44,7 @@ class Method:
     availability: str = "available"
     needs: tuple[str, ...] = ()
     prior_hit_rate: float = DEFAULT_HIT_RATE
+    acquirable: bool = False
 
     @property
     def key(self) -> str:
@@ -62,13 +63,16 @@ class Policy:
     max_hops: int = 4
     allow_external_egress: bool = False
     allow_active: bool = False
-    max_routes: int = 200
+    max_routes: int = 500
+    assume_acquired: tuple[str, ...] = ()
+    include_acquirable: bool = False
 
 
 @dataclass
 class Goal:
     forms: tuple[str, ...]
     tag_prefix: str | None = None
+    rung: str | None = None
 
 
 @dataclass
@@ -93,19 +97,30 @@ def _k(node: dict) -> tuple[str, str]:
     return node["form"], ",".join(map(str, v)) if isinstance(v, list) else str(v)
 
 
-def load_methods(manifests: list[dict]) -> list[Method]:
+def acquire_need(connector_id: str) -> str:
+    return f"acquire {connector_id}"
+
+
+def load_methods(manifests: list[dict], assume_acquired: tuple[str, ...] = ()) -> list[Method]:
+    """Acquirable sources become unavailable methods whose need is 'acquire <id>', unless the
+    plan assumes them acquired (what-if)."""
     methods = []
     for m in manifests:
+        acq = m.get("tier") == "acquirable"
+        assumed = m["id"] in assume_acquired
         for meth in m["methods"]:
+            availability = meth.get("availability", "available")
+            needs = tuple(meth.get("needs", []))
+            if acq and not assumed:
+                availability, needs = "unavailable", (acquire_need(m["id"]),) + needs
             methods.append(Method(
                 connector=m["id"], name=meth["name"],
                 accepts=tuple(meth["accepts"]), emits=tuple(meth["emits"]["forms"]),
                 egress=m["egress"], interaction=meth["interaction"],
                 independence_group=m["independence_group"],
                 queries=meth["cost"]["queries"], expected_ms=meth["cost"].get("expected_ms", 0),
-                availability=meth.get("availability", "available"),
-                needs=tuple(meth.get("needs", [])),
-                prior_hit_rate=meth.get("prior_hit_rate", DEFAULT_HIT_RATE)))
+                availability=availability, needs=needs,
+                prior_hit_rate=meth.get("prior_hit_rate", DEFAULT_HIT_RATE), acquirable=acq))
     return methods
 
 
@@ -121,8 +136,11 @@ def enumerate_routes(methods: list[Method], seed_forms: set[str], goal: Goal,
                 if a != b:
                     by_form.setdefault(a, []).append((m, b))
     goal_forms = set(goal.forms)
+    dist = distance_to_goal(by_form, goal_forms)
+    reach = lambda form, hops_left: dist.get(form, 1 << 30) <= hops_left  # noqa: E731
     routes: list[list[AbstractHop]] = []
-    frontier = [[AbstractHop(m, s, b)] for s in sorted(seed_forms) for m, b in by_form.get(s, [])]
+    frontier = [[AbstractHop(m, s, b)] for s in sorted(seed_forms) for m, b in by_form.get(s, [])
+                if reach(b, policy.max_hops - 1)]
     depth = 1
     truncated = False
     while frontier and depth <= policy.max_hops:
@@ -138,11 +156,30 @@ def enumerate_routes(methods: list[Method], seed_forms: set[str], goal: Goal,
                 continue
             seen = {path[0].from_form} | {h.to_form for h in path}
             for m, b in by_form.get(last.to_form, []):
-                if b not in seen:
+                if b not in seen and reach(b, policy.max_hops - depth - 1):
                     nxt.append(path + [AbstractHop(m, last.to_form, b)])
         frontier = nxt
         depth += 1
     return routes, truncated
+
+
+def distance_to_goal(by_form: dict[str, list[tuple[Method, str]]], goal_forms: set[str]) -> dict[str, int]:
+    """Fewest hops from each form to any goal form (reverse BFS). Lets enumeration drop any
+    extension that cannot reach the goal in the hops left, which keeps deep identity routes
+    tractable."""
+    rev: dict[str, set[str]] = {}
+    for a, outs in by_form.items():
+        for _, b in outs:
+            rev.setdefault(b, set()).add(a)
+    dist = {g: 0 for g in goal_forms}
+    queue = list(goal_forms)
+    while queue:
+        b = queue.pop(0)
+        for a in rev.get(b, ()):
+            if a not in dist:
+                dist[a] = dist[b] + 1
+                queue.append(a)
+    return dist
 
 
 def route_id(path: list[AbstractHop]) -> str:
@@ -282,7 +319,7 @@ def mark_corroboration(routes: list[dict]) -> set[str]:
 
 def rank(routes: list[dict]) -> None:
     routes.sort(key=lambda r: (STATUS_ORDER[r["status"]], not r.get("corroborates", True),
-                               -r["p_success"], r["remaining_cost"]["queries"], len(r["hops"]), r["id"]))
+                               len(r.get("needs", [])), -r["p_success"], r["remaining_cost"]["queries"], len(r["hops"]), r["id"]))
     for i, r in enumerate(routes, 1):
         r["rank"] = i
 
@@ -330,11 +367,60 @@ def diff(previous: dict | None, routes: list[dict]) -> list[dict]:
     return changes
 
 
+def acquisitions(routes: list[dict], manifests: list[dict]) -> list[dict]:
+    meta = {m["id"]: m for m in manifests if m.get("tier") == "acquirable"}
+    out = {}
+    for r in routes:
+        if r["status"] == "dead":
+            continue
+        missing = [n[len("acquire "):] for n in r.get("needs", []) if n.startswith("acquire ")]
+        for cid in missing:
+            a = out.setdefault(cid, {"connector": cid, "unlocks_routes": 0, "sole_blocker_routes": 0,
+                                     "best_p": 0.0, "best_route": None})
+            a["unlocks_routes"] += 1
+            if len(missing) == 1 and len(r["needs"]) == 1:
+                a["sole_blocker_routes"] += 1
+            if r["p_success"] > a["best_p"]:
+                a["best_p"], a["best_route"] = r["p_success"], r["id"]
+    for cid, a in out.items():
+        m = meta.get(cid)
+        if m:
+            a.update(title=m["title"], path=m["acquisition"]["path"], cost_band=m["acquisition"]["cost_band"])
+    return sorted(out.values(), key=lambda a: (-a["sole_blocker_routes"], -a["unlocks_routes"], -a["best_p"], a["connector"]))
+
+
+COST_ORDER = {"none": 0, "$": 1, "$$": 2, "$$$": 3}
+
+
+def acquisition_sets(routes: list[dict], manifests: list[dict], limit: int = 10) -> list[dict]:
+    """Smallest combinations of missing sources that would open at least one route. Higher
+    rungs almost never hinge on one source, so this is the real shopping list."""
+    meta = {m["id"]: m for m in manifests if m.get("tier") == "acquirable"}
+    sets: dict[frozenset, dict] = {}
+    for r in routes:
+        if r["status"] != "needs_collection":
+            continue
+        other = [n for n in r.get("needs", []) if not n.startswith("acquire ")]
+        if other:
+            continue  # also needs a non-acquisition change; shown under requirements
+        key = frozenset(n[len("acquire "):] for n in r["needs"])
+        e = sets.setdefault(key, {"connectors": sorted(key), "routes": 0, "best_p": 0.0, "best_route": None})
+        e["routes"] += 1
+        if r["p_success"] > e["best_p"]:
+            e["best_p"], e["best_route"] = r["p_success"], r["id"]
+    for e in sets.values():
+        bands = [meta[c]["acquisition"]["cost_band"] for c in e["connectors"] if c in meta]
+        e["max_cost_band"] = max(bands, key=COST_ORDER.get) if bands else "none"
+        e["paths"] = sorted({meta[c]["acquisition"]["path"] for c in e["connectors"] if c in meta})
+    return sorted(sets.values(), key=lambda e: (len(e["connectors"]), COST_ORDER[e["max_cost_band"]],
+                                                -e["best_p"], -e["routes"], e["connectors"]))[:limit]
+
+
 def plan(manifests: list[dict], seeds: list[dict], goal: Goal, policy: Policy,
          evidence: Evidence | None = None, previous: dict | None = None,
          hit_rates: dict[str, float] | None = None, trigger: str = "initial",
          investigation_id: str | None = None, now: datetime | None = None) -> dict:
-    methods = load_methods(manifests)
+    methods = load_methods(manifests, policy.assume_acquired)
     evidence = evidence or Evidence()
     paths, truncated = enumerate_routes(methods, {s["form"] for s in seeds}, goal, policy)
     routes = [bind_route(p, seeds, evidence, policy, goal, hit_rates or {}) for p in paths]
@@ -347,7 +433,8 @@ def plan(manifests: list[dict], seeds: list[dict], goal: Goal, policy: Policy,
     for r in routes:
         if r["status"] in ("needs_collection", "blocked"):
             for n in r.get("needs", []):
-                unlock.setdefault(n, []).append(r["id"])
+                if not n.startswith("acquire "):
+                    unlock.setdefault(n, []).append(r["id"])
     requirements = sorted(({"need": n, "unlocks_routes": len(ids)} for n, ids in unlock.items()),
                           key=lambda x: (-x["unlocks_routes"], x["need"]))
     completed_groups = sorted({g for r in routes if r["status"] == "completed"
@@ -358,12 +445,17 @@ def plan(manifests: list[dict], seeds: list[dict], goal: Goal, policy: Policy,
         "generated_at": (now or datetime.now(timezone.utc)).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "trigger": trigger,
         "seeds": seeds,
-        "goal": {"forms": list(goal.forms), **({"tag_prefix": goal.tag_prefix} if goal.tag_prefix else {})},
+        "goal": {"forms": list(goal.forms), **({"tag_prefix": goal.tag_prefix} if goal.tag_prefix else {}),
+                 **({"rung": goal.rung} if goal.rung else {})},
         "policy": {"max_hops": policy.max_hops, "allow_external_egress": policy.allow_external_egress,
-                   "allow_active": policy.allow_active, "max_routes": policy.max_routes},
+                   "allow_active": policy.allow_active, "max_routes": policy.max_routes,
+                   "include_acquirable": policy.include_acquirable,
+                   "assume_acquired": list(policy.assume_acquired)},
         "summary": {"routes": len(routes), "routes_truncated": truncated, "by_status": by_status,
                     "independent_groups_completed": completed_groups,
                     "requirements": requirements,
+                    "acquisitions": acquisitions(routes, manifests),
+                    "acquisition_sets": acquisition_sets(routes, manifests),
                     "best_route": routes[0]["id"] if routes and routes[0]["status"] != "dead" else None},
         "next_actions": next_actions(routes, {m.key: m for m in methods}),
         "routes": routes,
@@ -385,6 +477,11 @@ def render_text(p: dict, limit: int = 15) -> str:
              + (" [truncated]" if s.get("routes_truncated") else "")]
     if s["independent_groups_completed"]:
         lines.append("  goal reached via independent groups: " + ", ".join(s["independent_groups_completed"]))
+    if s.get("acquisitions"):
+        lines.append("missing sources (sole = routes where it is the only thing missing):")
+        for a in s["acquisitions"][:8]:
+            lines.append(f"  + {a['connector']:<26} {a.get('path', '?'):<16} {a.get('cost_band', '?'):<4} "
+                         f"sole {a['sole_blocker_routes']:<4} total {a['unlocks_routes']:<5} best p={a['best_p']}")
     if s.get("requirements"):
         lines.append("would unlock more routes:")
         for q in s["requirements"][:5]:
@@ -410,3 +507,36 @@ def render_text(p: dict, limit: int = 15) -> str:
     if len(p["routes"]) > limit:
         lines.append(f"  … {len(p['routes']) - limit} more")
     return "\n".join(lines)
+
+
+def render_rung(p: dict, rung: dict) -> str:
+    """One block per ladder rung: is it reachable with what you have, and what to get first."""
+    s = p["summary"]
+    runnable = s["by_status"].get("viable", 0) + s["by_status"].get("in_progress", 0)
+    lines = [f"== {rung['name']}: {rung['question']}",
+             f"   {s['routes']} routes within {p['policy']['max_hops']} hops"
+             + (" [truncated]" if s.get("routes_truncated") else "")
+             + f"; runnable now {runnable}; "
+             + ", ".join(f"{k} {v}" for k, v in sorted(s["by_status"].items()))]
+    best = next((r for r in p["routes"] if r["status"] in ("viable", "in_progress", "completed")), None)
+    if best:
+        lines.append("   best runnable: " + _chain(best))
+    else:
+        lines.append("   nothing runnable with current sources")
+    cheapest = next((r for r in p["routes"] if r["status"] == "needs_collection"), None)
+    if cheapest:
+        lines.append(f"   fewest missing ({len(cheapest['needs'])}): " + _chain(cheapest))
+        lines.append("      needs: " + "; ".join(cheapest["needs"]))
+    if s.get("acquisition_sets"):
+        lines.append("   smallest source combinations that open a route (cheapest first):")
+        for e in s["acquisition_sets"][:5]:
+            lines.append(f"     + {' + '.join(e['connectors']):<62} max {e['max_cost_band']:<4} "
+                         f"{e['routes']:>3} route(s), best p={e['best_p']}")
+    return "\n".join(lines)
+
+
+def _chain(r: dict) -> str:
+    out = r["hops"][0]["from_form"]
+    for h in r["hops"]:
+        out += f" -{GLYPH[h['status']]} {h['connector']}/{h['method']}-> {h['to_form']}"
+    return f"p={r['p_success']} " + out

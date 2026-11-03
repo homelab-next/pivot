@@ -49,13 +49,17 @@ def main() -> int:
     reg, forms, bad = registry(), known_forms(), 0
     mv = validator("connector-manifest.schema.json", reg)
     ids = set()
-    for p in sorted((ROOT / "catalog" / "connectors").glob("*.yaml")):
+    manifests = sorted((ROOT / "catalog" / "connectors").glob("*.yaml")) + \
+        sorted((ROOT / "catalog" / "acquirable").glob("*.yaml"))
+    for p in manifests:
         doc = yaml.safe_load(p.read_text())
         errs = [f"{'/'.join(map(str, e.path))}: {e.message}" for e in mv.iter_errors(doc)]
         if doc.get("id") in ids:
             errs.append(f"duplicate connector id {doc['id']}")
         ids.add(doc.get("id"))
         for m in doc.get("methods", []):
+            if doc.get("tier") == "acquirable" and m.get("availability"):
+                errs.append(f"method {m['name']}: acquirable sources get availability from the tier")
             if m.get("availability", "available") != "available" and not m.get("needs"):
                 errs.append(f"method {m['name']}: availability {m['availability']} requires 'needs'")
             for f in m.get("accepts", []) + m.get("emits", {}).get("forms", []):

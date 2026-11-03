@@ -1,0 +1,71 @@
+schema: pivot.connector/1
+id: cybercrime-forums
+version: 0.1.0
+title: Underground forums and markets intelligence
+tier: acquirable
+description: 'Where tools are bought and sold: links a toolkit to a seller persona and its contact selectors.'
+kind: api
+egress: external
+independence_group: closed-sources
+handling:
+  default_tlp: amber
+acquisition:
+  path: commercial
+  cost_band: $$$
+  examples:
+  - Flashpoint
+  - Intel 471
+  - KELA
+  - Recorded Future
+  lead_time: weeks
+  constraints:
+  - Collection by the vendor; do not interact with actors yourself without a legal and ethics framework
+methods:
+- name: artifact_to_posts
+  description: Ads, sales threads and chatter mentioning the tool, panel or infrastructure.
+  prior_hit_rate: 0.2
+  accepts:
+  - inet:fqdn
+  - inet:ipv4
+  - hash:sha256
+  - risk:threat
+  - risk:tool:software
+  emits:
+    forms:
+    - inet:web:post
+  interaction: passive
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: post_to_actor_account
+  prior_hit_rate: 0.9
+  accepts:
+  - inet:web:post
+  emits:
+    forms:
+    - inet:web:acct
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: account_to_selectors
+  description: Jabber/Telegram handles, payment addresses, linked handles, vendor persona profiles.
+  prior_hit_rate: 0.5
+  accepts:
+  - inet:web:acct
+  emits:
+    forms:
+    - inet:email
+    - crypto:currency:address
+    - inet:web:acct
+    - ps:persona
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

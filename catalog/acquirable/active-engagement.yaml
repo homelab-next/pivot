@@ -1,0 +1,52 @@
+schema: pivot.connector/1
+id: active-engagement
+version: 0.1.0
+title: Sinkholes and canary tokens
+tier: acquirable
+description: Makes the operator reveal their real egress. Strong when it works, and it is active.
+kind: api
+egress: external
+independence_group: own-active-ops
+handling:
+  default_tlp: amber
+acquisition:
+  path: develop
+  cost_band: $
+  examples:
+  - re-register expired actor domains as sinkholes
+  - canarytokens.org / Thinkst Canary documents and URLs
+  lead_time: weeks
+  constraints:
+  - 'Active measures: legal review required; collect only what the beacon itself returns; never hack back'
+methods:
+- name: sinkhole_domain
+  description: 'After the actor lets a domain lapse: who still checks in (victims, and sometimes the operator).'
+  prior_hit_rate: 0.4
+  accepts:
+  - inet:fqdn
+  emits:
+    forms:
+    - inet:ipv4
+  interaction: active
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: canary_beacon
+  description: A token placed where the operator will open it (for example in data they steal from a honeypot)
+    reports the opener IP and user agent, often outside AWS.
+  prior_hit_rate: 0.2
+  accepts:
+  - inet:url
+  - inet:fqdn
+  emits:
+    forms:
+    - inet:ipv4
+    - inet:http:request
+  interaction: active
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

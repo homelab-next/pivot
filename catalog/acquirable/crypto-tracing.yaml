@@ -1,0 +1,50 @@
+schema: pivot.connector/1
+id: crypto-tracing
+version: 0.1.0
+title: Blockchain tracing
+tier: acquirable
+description: Follows payments (for tools, hosting, ransoms) to a regulated exchange, which is where legal
+  process can reach a name.
+kind: api
+egress: external
+independence_group: blockchain
+handling:
+  default_tlp: amber
+acquisition:
+  path: commercial
+  cost_band: $$$
+  examples:
+  - Chainalysis Reactor
+  - TRM Labs
+  - GraphSense (open source)
+  - public block explorers (free)
+  lead_time: weeks
+methods:
+- name: address_to_cluster
+  prior_hit_rate: 0.7
+  accepts:
+  - crypto:currency:address
+  emits:
+    forms:
+    - crypto:currency:address
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: cluster_to_exchange_account
+  description: The customer account at the exchange or service the funds reach. The exchange holds KYC
+    for that specific account.
+  prior_hit_rate: 0.5
+  accepts:
+  - crypto:currency:address
+  emits:
+    forms:
+    - inet:service:account
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

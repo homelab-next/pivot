@@ -1,6 +1,6 @@
 # Pivot: design
 
-Status: **draft. Built so far: contracts (schemas, manifests) and the route planner.** This document fixes the data shapes and the moving parts
+Status: **draft. Built so far: contracts (schemas, manifests), the route planner, and the acquirable-source catalog with the attribution ladder.** This document fixes the data shapes and the moving parts
 so that the first build, and every data source after it, plugs into the same contracts.
 
 ## 1. What problem this solves
@@ -368,6 +368,16 @@ If pivot later moves beyond this lab, the manifest and the two data shapes are t
 contract. That fits homelab-next's model, where a capability is a contract plus conformance
 tests plus swappable adapters, so the connector interface can become a homelab-next capability
 without changing either shape.
+
+## 8a. Sources you do not have yet
+
+The catalog is not limited to the lab. `catalog/acquirable/` holds sources you could buy,
+join, build, or only reach through law enforcement (`tier: acquirable`, with an `acquisition`
+block: path, cost band, examples, constraints). The planner treats each of them as a missing
+link named `acquire <id>`, ranks which ones (and which *combinations*) would open routes, and
+can plan as if you had them (`--assume <id>`). Goals can be set per rung of an attribution
+ladder (`catalog/ladder.yaml`). The worked AWS example is in
+[`attribution-ladder.md`](attribution-ladder.md).
 
 ## 9. Touch points in this lab today
 

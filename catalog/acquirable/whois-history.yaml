@@ -1,0 +1,51 @@
+schema: pivot.connector/1
+id: whois-history
+version: 0.1.0
+title: Historical WHOIS and reverse WHOIS
+tier: acquirable
+description: Registration details tie domains to each other and occasionally to an email that is reused
+  elsewhere.
+kind: api
+egress: external
+independence_group: registrar-records
+handling:
+  default_tlp: amber
+acquisition:
+  path: commercial
+  cost_band: $$
+  examples:
+  - DomainTools Iris
+  - WhoisXML API
+  - Whoxy
+  lead_time: days
+methods:
+- name: fqdn_to_registrant
+  description: Mostly privacy-redacted since 2018; old records and careless registrants still pay off.
+  prior_hit_rate: 0.3
+  accepts:
+  - inet:fqdn
+  emits:
+    forms:
+    - inet:whois:email
+    - inet:email
+    - inet:whois:contact
+  interaction: passive
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: email_to_domains
+  description: 'Reverse WHOIS: every domain registered with the email.'
+  prior_hit_rate: 0.5
+  accepts:
+  - inet:email
+  emits:
+    forms:
+    - inet:fqdn
+  interaction: passive
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

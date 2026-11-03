@@ -1,0 +1,35 @@
+schema: pivot.connector/1
+id: cloud-ranges
+version: 0.1.0
+title: Cloud provider IP ranges
+tier: acquirable
+description: 'Classifies an address as cloud-hosted. Matters because EC2 public IPs are recycled: every
+  later pivot on an AWS IP must be bounded to the window the actor held it.'
+kind: api
+egress: internal
+independence_group: provider-published
+handling:
+  default_tlp: amber
+acquisition:
+  path: free
+  cost_band: none
+  examples:
+  - AWS ip-ranges.json (published by AWS)
+  - Azure/GCP equivalents
+  lead_time: minutes
+methods:
+- name: ip_to_platform
+  description: Is this an AWS address, which region and service (EC2, CloudFront, API Gateway). Context
+    only; it does not chain further.
+  prior_hit_rate: 0.95
+  accepts:
+  - inet:ipv4
+  emits:
+    forms:
+    - inet:service:platform
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

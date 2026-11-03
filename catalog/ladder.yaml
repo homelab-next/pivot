@@ -1,0 +1,20 @@
+# Attribution ladder: each rung is a goal the planner can target. See docs/attribution-ladder.md.
+# Higher rungs need more independent routes before they mean anything.
+rungs:
+  - name: cluster
+    question: Is this activity part of a cluster we (or others) already track?
+    forms: [syn:tag, risk:threat]
+    tag_prefix: cno.threat
+    min_independent_groups: 2
+  - name: operator-accounts
+    question: Which accounts does the operator control (cloud tenant, email, online handles)?
+    forms: [inet:service:tenant, inet:email, inet:web:acct, inet:service:account]
+    min_independent_groups: 2
+  - name: persona
+    question: Which persona runs those accounts (a consistent online identity)?
+    forms: [ps:persona, ps:contact]
+    min_independent_groups: 3
+  - name: identity
+    question: Which real person or organisation is behind the persona?
+    forms: [ps:person, ou:org]
+    min_independent_groups: 3

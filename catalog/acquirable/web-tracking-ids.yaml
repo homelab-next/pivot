@@ -1,0 +1,49 @@
+schema: pivot.connector/1
+id: web-tracking-ids
+version: 0.1.0
+title: Web tracking / analytics ID reuse
+tier: acquirable
+description: 'The cookie-style pivot that works without seeing traffic: shared tracking IDs across sites.'
+kind: api
+egress: external
+independence_group: web-crawlers
+handling:
+  default_tlp: amber
+acquisition:
+  path: freemium
+  cost_band: $
+  examples:
+  - urlscan.io
+  - BuiltWith
+  - DNSlytics
+  - SpyOnWeb
+  lead_time: minutes
+methods:
+- name: fqdn_to_tracking_ids
+  description: Google Analytics/Tag Manager, ad and other tracker IDs on the actor sites.
+  prior_hit_rate: 0.3
+  accepts:
+  - inet:fqdn
+  emits:
+    forms:
+    - _pivot:web:tracking_id
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: tracking_id_to_fqdns
+  description: 'Every other site with the same ID: phishing kits and operator personal sites share them.'
+  prior_hit_rate: 0.7
+  accepts:
+  - _pivot:web:tracking_id
+  emits:
+    forms:
+    - inet:fqdn
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

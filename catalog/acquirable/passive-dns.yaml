@@ -1,0 +1,67 @@
+schema: pivot.connector/1
+id: passive-dns
+version: 0.1.0
+title: Passive DNS (historical resolutions)
+tier: acquirable
+description: 'The single most useful missing link for cloud-hosted infrastructure: AWS IPs churn, domain
+  history does not.'
+kind: api
+egress: external
+independence_group: passive-dns-sensor-net
+handling:
+  default_tlp: amber
+acquisition:
+  path: commercial
+  cost_band: $$
+  examples:
+  - DomainTools Farsight DNSDB
+  - SecurityTrails
+  - Validin
+  - Silent Push
+  - Mnemonic PassiveDNS (free, limited)
+  lead_time: days
+methods:
+- name: ip_to_fqdns
+  description: Every name that resolved to the IP, with first/last seen. On recycled EC2 IPs, keep only
+    names inside the actor window.
+  prior_hit_rate: 0.7
+  accepts:
+  - inet:ipv4
+  emits:
+    forms:
+    - inet:fqdn
+  interaction: passive
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: fqdn_to_ips
+  description: 'Where the actor domain has pointed over time: often moves off AWS to a VPS or a home IP
+    during setup.'
+  prior_hit_rate: 0.8
+  accepts:
+  - inet:fqdn
+  emits:
+    forms:
+    - inet:ipv4
+  interaction: passive
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: fqdn_to_ns_siblings
+  description: Domains sharing the same unusual name server or registrar pattern.
+  prior_hit_rate: 0.5
+  accepts:
+  - inet:fqdn
+  emits:
+    forms:
+    - inet:fqdn
+  interaction: passive
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

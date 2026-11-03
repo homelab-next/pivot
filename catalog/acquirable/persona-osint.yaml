@@ -1,0 +1,52 @@
+schema: pivot.connector/1
+id: persona-osint
+version: 0.1.0
+title: Handle and persona OSINT
+tier: acquirable
+description: 'Builds the persona from handle reuse. Correlation, not proof: same handle can be a different
+  person.'
+kind: api
+egress: external
+independence_group: open-web
+handling:
+  default_tlp: amber
+acquisition:
+  path: open_source_tool
+  cost_band: none
+  examples:
+  - maigret / sherlock (username reuse)
+  - Telegram and social platform search
+  lead_time: minutes
+methods:
+- name: handle_to_accounts
+  description: Same handle across platforms.
+  prior_hit_rate: 0.5
+  accepts:
+  - inet:web:acct
+  emits:
+    forms:
+    - inet:web:acct
+    - inet:service:account
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: account_to_persona
+  description: Profile details, writing language, time-of-day activity.
+  prior_hit_rate: 0.4
+  accepts:
+  - inet:web:acct
+  - inet:service:account
+  emits:
+    forms:
+    - ps:persona
+    - ps:contact
+    - lang:language
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

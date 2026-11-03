@@ -1,0 +1,54 @@
+schema: pivot.connector/1
+id: code-search
+version: 0.1.0
+title: Public code and commit search
+tier: acquirable
+description: Operators test their own tools. A build path, a key or a domain in a public commit yields
+  a commit email.
+kind: api
+egress: external
+independence_group: code-hosting
+handling:
+  default_tlp: amber
+acquisition:
+  path: free
+  cost_band: none
+  examples:
+  - GitHub code search
+  - grep.app
+  - Sourcegraph
+  - GitGuardian public monitoring
+  lead_time: minutes
+methods:
+- name: artifact_to_repos
+  description: Actor tooling, tests or leaked configs that mention the artifact.
+  prior_hit_rate: 0.2
+  accepts:
+  - _pivot:aws:access_key_id
+  - it:dev:str
+  - inet:fqdn
+  - inet:service:bucket
+  emits:
+    forms:
+    - it:dev:repo
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: repo_to_identity
+  description: Commit author emails and accounts.
+  prior_hit_rate: 0.8
+  accepts:
+  - it:dev:repo
+  emits:
+    forms:
+    - inet:email
+    - inet:service:account
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

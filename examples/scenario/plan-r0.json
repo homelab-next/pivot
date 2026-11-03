@@ -1,7 +1,7 @@
 {
  "schema": "pivot.plan/1",
  "revision": 0,
- "generated_at": "2026-11-03T16:26:41Z",
+ "generated_at": "2026-11-03T16:42:26Z",
  "trigger": "initial",
  "seeds": [
   {
@@ -19,7 +19,9 @@
   "max_hops": 3,
   "allow_external_egress": false,
   "allow_active": false,
-  "max_routes": 200
+  "max_routes": 500,
+  "include_acquirable": false,
+  "assume_acquired": []
  },
  "summary": {
   "routes": 106,
@@ -35,6 +37,8 @@
     "unlocks_routes": 60
    }
   ],
+  "acquisitions": [],
+  "acquisition_sets": [],
   "best_route": "r-84417b0d64"
  },
  "next_actions": [

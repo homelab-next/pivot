@@ -1,0 +1,44 @@
+== cluster: Is this activity part of a cluster we (or others) already track?
+   20000 routes within 6 hops [truncated]; runnable now 5624; blocked 1166, needs_collection 13210, viable 5624
+   best runnable: p=0.7 inet:ipv4 -▶ intelowl/reputation_passive-> syn:tag
+   fewest missing (1): p=0.49 inet:ipv4 -◌ passive-dns/ip_to_fqdns-> inet:fqdn -· intelowl/reputation_passive-> syn:tag
+      needs: acquire passive-dns
+   smallest source combinations that open a route (cheapest first):
+     + code-search                                                    max none 239 route(s), best p=0.0672
+     + community-sharing                                              max $    2118 route(s), best p=0.3
+     + malware-config-extraction                                      max $    487 route(s), best p=0.252
+     + passive-dns                                                    max $$   146 route(s), best p=0.49
+     + whois-history                                                  max $$   981 route(s), best p=0.126
+== operator-accounts: Which accounts does the operator control (cloud tenant, email, online handles)?
+   11125 routes within 6 hops; runnable now 0; needs_collection 11125
+   nothing runnable with current sources
+   fewest missing (1): p=0.21 inet:ipv4 -▶ lake.dns/host_queried_fqdn-> inet:fqdn -◌ whois-history/fqdn_to_registrant-> inet:email
+      needs: acquire whois-history
+   smallest source combinations that open a route (cheapest first):
+     + code-search                                                    max none 588 route(s), best p=0.112
+     + whois-history                                                  max $$   1009 route(s), best p=0.21
+     + cybercrime-forums                                              max $$$  1369 route(s), best p=0.18
+     + aws-key-attribution + malware-config-extraction                max $    342 route(s), best p=0.324
+     + aws-public-resources + malware-config-extraction               max $    342 route(s), best p=0.216
+== persona: Which persona runs those accounts (a consistent online identity)?
+   8696 routes within 6 hops; runnable now 0; needs_collection 8696
+   nothing runnable with current sources
+   fewest missing (1): p=0.09 inet:ipv4 -◌ cybercrime-forums/artifact_to_posts-> inet:web:post -◌ cybercrime-forums/post_to_actor_account-> inet:web:acct -◌ cybercrime-forums/account_to_selectors-> ps:persona
+      needs: acquire cybercrime-forums
+   smallest source combinations that open a route (cheapest first):
+     + cybercrime-forums                                              max $$$  321 route(s), best p=0.09
+     + code-search + persona-osint                                    max none 140 route(s), best p=0.0448
+     + code-search + provider-legal-process                           max none 140 route(s), best p=0.0448
+     + provider-legal-process + whois-history                         max $$   294 route(s), best p=0.084
+     + cybercrime-forums + persona-osint                              max $$$  764 route(s), best p=0.072
+== identity: Which real person or organisation is behind the persona?
+   5888 routes within 6 hops; runnable now 0; needs_collection 5888
+   nothing runnable with current sources
+   fewest missing (2): p=0.084 inet:ipv4 -▶ lake.dns/host_queried_fqdn-> inet:fqdn -◌ whois-history/fqdn_to_registrant-> inet:email -◌ provider-legal-process/account_to_subscriber-> ou:org
+      needs: acquire provider-legal-process; acquire whois-history
+   smallest source combinations that open a route (cheapest first):
+     + code-search + provider-legal-process                           max none 280 route(s), best p=0.0448
+     + provider-legal-process + whois-history                         max $$   588 route(s), best p=0.084
+     + cybercrime-forums + provider-legal-process                     max $$$  764 route(s), best p=0.072
+     + aws-key-attribution + malware-config-extraction + provider-legal-process max $    160 route(s), best p=0.1296
+     + aws-public-resources + malware-config-extraction + provider-legal-process max $    160 route(s), best p=0.0864

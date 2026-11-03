@@ -1,0 +1,44 @@
+== cluster: Is this activity part of a cluster we (or others) already track?
+   20000 routes within 6 hops [truncated]; runnable now 6563; blocked 1529, needs_collection 11908, viable 6563
+   best runnable: p=0.7 inet:ipv4 -▶ intelowl/reputation_passive-> syn:tag
+   fewest missing (1): p=0.49 inet:ipv4 -◌ passive-dns/ip_to_fqdns-> inet:fqdn -· intelowl/reputation_passive-> syn:tag
+      needs: acquire passive-dns
+   smallest source combinations that open a route (cheapest first):
+     + community-sharing                                              max $    2989 route(s), best p=0.3
+     + aws-public-resources                                           max $    157 route(s), best p=0.1008
+     + passive-dns                                                    max $$   170 route(s), best p=0.49
+     + internet-scan-history                                          max $$    51 route(s), best p=0.392
+     + whois-history                                                  max $$   1070 route(s), best p=0.126
+== operator-accounts: Which accounts does the operator control (cloud tenant, email, online handles)?
+   11125 routes within 6 hops; runnable now 1464; blocked 338, needs_collection 9323, viable 1464
+   best runnable: p=0.324 inet:ipv4 -▶ lake.honeypot/sessions_for_ip-> hash:sha256 -· malware-config-extraction/sample_to_artifacts-> _pivot:aws:access_key_id -· aws-key-attribution/key_to_account-> inet:service:tenant
+   fewest missing (1): p=0.2268 inet:ipv4 -◌ passive-dns/ip_to_fqdns-> inet:fqdn -· synapse/neighbours-> hash:sha256 -· malware-config-extraction/sample_to_artifacts-> _pivot:aws:access_key_id -· aws-key-attribution/key_to_account-> inet:service:tenant
+      needs: acquire passive-dns
+   smallest source combinations that open a route (cheapest first):
+     + aws-public-resources                                           max $    346 route(s), best p=0.216
+     + community-sharing                                              max $    402 route(s), best p=0.1458
+     + passive-dns                                                    max $$    63 route(s), best p=0.2268
+     + whois-history                                                  max $$   1132 route(s), best p=0.21
+     + internet-scan-history                                          max $$    14 route(s), best p=0.1814
+== persona: Which persona runs those accounts (a consistent online identity)?
+   8696 routes within 6 hops; runnable now 238; blocked 54, needs_collection 8404, viable 238
+   best runnable: p=0.0448 inet:ipv4 -▶ lake.dns/host_queried_fqdn-> inet:fqdn -· code-search/artifact_to_repos-> it:dev:repo -· code-search/repo_to_identity-> inet:service:account -· persona-osint/account_to_persona-> ps:contact
+   fewest missing (1): p=0.1296 inet:ipv4 -▶ synapse/neighbours-> hash:sha256 -· malware-config-extraction/sample_to_artifacts-> _pivot:aws:access_key_id -· aws-key-attribution/key_to_account-> inet:service:tenant -◌ provider-legal-process/account_to_subscriber-> ps:contact
+      needs: acquire provider-legal-process
+   smallest source combinations that open a route (cheapest first):
+     + provider-legal-process                                         max none 318 route(s), best p=0.1296
+     + community-sharing                                              max $     42 route(s), best p=0.0173
+     + passive-dns                                                    max $$     8 route(s), best p=0.0448
+     + internet-scan-history                                          max $$     2 route(s), best p=0.0358
+     + cybercrime-forums                                              max $$$  1109 route(s), best p=0.09
+== identity: Which real person or organisation is behind the persona?
+   5888 routes within 6 hops; runnable now 0; needs_collection 5888
+   nothing runnable with current sources
+   fewest missing (1): p=0.1296 inet:ipv4 -▶ lake.honeypot/sessions_for_ip-> hash:sha256 -· malware-config-extraction/sample_to_artifacts-> _pivot:aws:access_key_id -· aws-key-attribution/key_to_account-> inet:service:tenant -◌ provider-legal-process/account_to_subscriber-> ou:org
+      needs: acquire provider-legal-process
+   smallest source combinations that open a route (cheapest first):
+     + provider-legal-process                                         max none 636 route(s), best p=0.1296
+     + aws-public-resources + provider-legal-process                  max $    160 route(s), best p=0.0864
+     + community-sharing + provider-legal-process                     max $    122 route(s), best p=0.0583
+     + passive-dns + provider-legal-process                           max $$    28 route(s), best p=0.0907
+     + provider-legal-process + whois-history                         max $$   650 route(s), best p=0.084

@@ -1,0 +1,36 @@
+schema: pivot.connector/1
+id: upstream-netflow
+version: 0.1.0
+title: Upstream netflow (who talks to the C2)
+tier: acquirable
+description: 'The classic way to get from a C2 server to the operator: someone has to log in to it, and
+  that connection comes from somewhere. Usually lands on another layer of infrastructure first.'
+kind: api
+egress: external
+independence_group: isp-netflow
+handling:
+  default_tlp: amber
+acquisition:
+  path: commercial
+  cost_band: $$$
+  examples:
+  - Team Cymru Pure Signal Recon/Scout
+  lead_time: weeks to months
+  constraints:
+  - Vetted access, usually for established security teams; sampled data, so absence is weak evidence
+methods:
+- name: ip_peers
+  description: 'Sampled flows to and from the actor host as seen by transit providers: the operator management
+    sessions (SSH/RDP/C2 panel logins) and their source (VPN exit, VPS, or home).'
+  prior_hit_rate: 0.6
+  accepts:
+  - inet:ipv4
+  emits:
+    forms:
+    - inet:ipv4
+  interaction: passive
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 20000
+  max_results: 500

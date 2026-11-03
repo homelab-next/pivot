@@ -1,0 +1,35 @@
+schema: pivot.connector/1
+id: aws-key-attribution
+version: 0.1.0
+title: AWS access key to account ID
+tier: acquirable
+description: A leaked AKIA/ASIA key ID (in a sample, repo or config) names the actor AWS account.
+kind: api
+egress: external
+independence_group: aws-api
+handling:
+  default_tlp: amber
+acquisition:
+  path: free
+  cost_band: none
+  examples:
+  - sts:GetAccessKeyInfo, called with your own AWS credentials
+  lead_time: minutes
+  constraints:
+  - Look up the key ID only; never authenticate with a found secret key
+methods:
+- name: key_to_account
+  description: Returns the 12-digit AWS account ID that owns an access key ID. Does not use or test the
+    key.
+  prior_hit_rate: 0.9
+  accepts:
+  - _pivot:aws:access_key_id
+  emits:
+    forms:
+    - inet:service:tenant
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 500
+  max_results: 500

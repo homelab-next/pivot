@@ -1,0 +1,45 @@
+schema: pivot.connector/1
+id: provider-legal-process
+version: 0.1.0
+title: Legal process to providers (via law enforcement)
+tier: acquirable
+description: The only step that turns a well-evidenced account into a named, legally attributable person
+  or organisation. You cannot run it; you hand law enforcement a package good enough that they will.
+kind: api
+egress: external
+independence_group: provider-records
+handling:
+  default_tlp: amber
+acquisition:
+  path: legal_process
+  cost_band: none
+  examples:
+  - FBI IC3 / field office referral
+  - national CERT
+  - MLAT for foreign providers
+  lead_time: months
+  constraints:
+  - Only law enforcement or a court can compel this; your deliverable is the evidence package
+  - Months, not days
+methods:
+- name: account_to_subscriber
+  description: 'Subscriber/KYC records for one specific account: AWS account billing, exchange customer,
+    email provider subscriber and login IPs, platform account records.'
+  prior_hit_rate: 0.4
+  accepts:
+  - inet:service:tenant
+  - inet:service:account
+  - inet:email
+  - inet:web:acct
+  emits:
+    forms:
+    - ps:person
+    - ou:org
+    - ps:contact
+    - inet:ipv4
+  interaction: passive
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 7776000000
+  max_results: 500

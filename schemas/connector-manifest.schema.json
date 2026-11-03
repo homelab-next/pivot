@@ -4,62 +4,282 @@
   "title": "Connector manifest: declares a source's pivots so they enter the catalog",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "id", "version", "kind", "egress", "independence_group", "handling", "methods"],
+  "required": [
+    "schema",
+    "id",
+    "version",
+    "kind",
+    "egress",
+    "independence_group",
+    "handling",
+    "methods"
+  ],
   "properties": {
-    "schema": {"const": "pivot.connector/1"},
-    "id": {"type": "string", "pattern": "^[a-z0-9]+([.-][a-z0-9]+)*$"},
-    "version": {"type": "string"},
-    "description": {"type": "string"},
-    "kind": {"enum": ["graph", "lake", "api", "corpus"]},
-    "egress": {"enum": ["internal", "external"],
-               "description": "external = inputs leave the network. The engine never sends internal-only or tlp amber+ values here."},
-    "independence_group": {"type": "string",
-               "description": "Upstream truth this derives from. Routes sharing a group do not corroborate each other."},
+    "schema": {
+      "const": "pivot.connector/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+([.-][a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "graph",
+        "lake",
+        "api",
+        "corpus"
+      ]
+    },
+    "egress": {
+      "enum": [
+        "internal",
+        "external"
+      ],
+      "description": "external = inputs leave the network. The engine never sends internal-only or tlp amber+ values here."
+    },
+    "independence_group": {
+      "type": "string",
+      "description": "Upstream truth this derives from. Routes sharing a group do not corroborate each other."
+    },
     "handling": {
-      "type": "object", "additionalProperties": false, "required": ["default_tlp"],
-      "properties": {"default_tlp": {"$ref": "common.schema.json#/$defs/tlp"}}
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "default_tlp"
+      ],
+      "properties": {
+        "default_tlp": {
+          "$ref": "common.schema.json#/$defs/tlp"
+        }
+      }
     },
     "rate_limit": {
-      "type": "object", "additionalProperties": false,
-      "properties": {"per_minute": {"type": "integer", "minimum": 1}, "concurrent": {"type": "integer", "minimum": 1}}
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "per_minute": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "concurrent": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
     },
-    "gaps": {"type": "array", "items": {"type": "string"}, "description": "Known blind spots, surfaced in the coverage report."},
-    "methods": {
-      "type": "array", "minItems": 1,
+    "gaps": {
+      "type": "array",
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["name", "accepts", "emits", "interaction", "time_semantics", "cost", "max_results"],
+        "type": "string"
+      },
+      "description": "Known blind spots, surfaced in the coverage report."
+    },
+    "methods": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "accepts",
+          "emits",
+          "interaction",
+          "time_semantics",
+          "cost",
+          "max_results"
+        ],
         "properties": {
-          "name": {"type": "string", "pattern": "^[a-z0-9_]+$"},
-          "description": {"type": "string"},
-          "accepts": {"type": "array", "minItems": 1, "items": {"$ref": "common.schema.json#/$defs/form"}},
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "description": {
+            "type": "string"
+          },
+          "accepts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "common.schema.json#/$defs/form"
+            }
+          },
           "emits": {
-            "type": "object", "additionalProperties": false, "required": ["forms"],
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "forms"
+            ],
             "properties": {
-              "forms": {"type": "array", "minItems": 1, "items": {"$ref": "common.schema.json#/$defs/form"}},
-              "verbs": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/verb"}}
+              "forms": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "common.schema.json#/$defs/form"
+                }
+              },
+              "verbs": {
+                "type": "array",
+                "items": {
+                  "$ref": "common.schema.json#/$defs/verb"
+                }
+              }
             }
           },
-          "interaction": {"enum": ["passive", "active"], "description": "active = the target may observe the lookup. Off unless enabled per investigation."},
-          "time_semantics": {"enum": ["windowed", "point_in_time", "current_state"]},
+          "interaction": {
+            "enum": [
+              "passive",
+              "active"
+            ],
+            "description": "active = the target may observe the lookup. Off unless enabled per investigation."
+          },
+          "time_semantics": {
+            "enum": [
+              "windowed",
+              "point_in_time",
+              "current_state"
+            ]
+          },
           "cost": {
-            "type": "object", "additionalProperties": false, "required": ["queries"],
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "queries"
+            ],
             "properties": {
-              "queries": {"type": "integer", "minimum": 0},
-              "expected_ms": {"type": "integer", "minimum": 0}
+              "queries": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "expected_ms": {
+                "type": "integer",
+                "minimum": 0
+              }
             }
           },
-          "max_results": {"type": "integer", "minimum": 1},
-          "computes_prevalence": {"type": "boolean", "default": false},
-          "availability": {"enum": ["available", "planned", "unavailable"], "default": "available",
-                           "description": "planned/unavailable methods still enter the catalog so the planner can show routes that need them."},
-          "needs": {"type": "array", "items": {"type": "string"},
-                    "description": "What must change for this method to work (collection or config). Required unless available."},
-          "prior_hit_rate": {"type": "number", "minimum": 0, "maximum": 1,
-                             "description": "Chance a call returns at least one unpruned result. Seed value; the planner replaces it with the rate measured from step logs."},
-          "implementation": {"type": "object", "description": "Kind-specific: SQL template, Storm query, API path, etc."}
+          "max_results": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "computes_prevalence": {
+            "type": "boolean",
+            "default": false
+          },
+          "availability": {
+            "enum": [
+              "available",
+              "planned",
+              "unavailable"
+            ],
+            "default": "available",
+            "description": "planned/unavailable methods still enter the catalog so the planner can show routes that need them."
+          },
+          "needs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What must change for this method to work (collection or config). Required unless available."
+          },
+          "prior_hit_rate": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Chance a call returns at least one unpruned result. Seed value; the planner replaces it with the rate measured from step logs."
+          },
+          "implementation": {
+            "type": "object",
+            "description": "Kind-specific: SQL template, Storm query, API path, etc."
+          }
+        }
+      }
+    },
+    "tier": {
+      "enum": [
+        "lab",
+        "acquirable"
+      ],
+      "default": "lab",
+      "description": "lab = deployed and queryable today. acquirable = a source you could buy, join, build or reach through others; it enters the plan as a missing link with its acquisition cost."
+    },
+    "title": {
+      "type": "string"
+    },
+    "acquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "cost_band",
+        "examples"
+      ],
+      "properties": {
+        "path": {
+          "enum": [
+            "free",
+            "freemium",
+            "commercial",
+            "open_source_tool",
+            "develop",
+            "membership",
+            "partnership",
+            "legal_process"
+          ],
+          "description": "How you would get it. legal_process = only law enforcement can run it; you can only package evidence for them."
+        },
+        "cost_band": {
+          "enum": [
+            "none",
+            "$",
+            "$$",
+            "$$$"
+          ],
+          "description": "none, $ (<1k/yr), $$ (1k-25k/yr), $$$ (>25k/yr or vetted access)."
+        },
+        "examples": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "lead_time": {
+          "type": "string"
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Legal, ethical, ToS or vetting conditions."
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "tier": {
+            "const": "acquirable"
+          }
+        },
+        "required": [
+          "tier"
+        ]
+      },
+      "then": {
+        "required": [
+          "acquisition",
+          "title"
+        ]
+      }
+    }
+  ]
 }

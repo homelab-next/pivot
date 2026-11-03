@@ -1,0 +1,44 @@
+schema: pivot.connector/1
+id: breach-and-stealer-data
+version: 0.1.0
+title: Breach records and infostealer logs
+tier: acquirable
+description: Historically one of the strongest persona-to-person links, because operator OPSEC fails on
+  their own machines.
+kind: api
+egress: external
+independence_group: breach-data
+handling:
+  default_tlp: amber
+acquisition:
+  path: commercial
+  cost_band: $$$
+  examples:
+  - SpyCloud
+  - Hudson Rock
+  - Constella
+  - Have I Been Pwned (email presence only)
+  lead_time: weeks
+  constraints:
+  - Legal and privacy review before use; jurisdiction-dependent
+  - Treat as a lead requiring corroboration; never sole basis for naming a person
+methods:
+- name: selector_to_records
+  description: Other accounts, phone numbers, names and login IPs tied to the email or handle; infostealer
+    logs from operators who infected themselves include saved logins and the real egress IP.
+  prior_hit_rate: 0.3
+  accepts:
+  - inet:email
+  - inet:web:acct
+  emits:
+    forms:
+    - ps:contact
+    - inet:ipv4
+    - inet:email
+    - inet:web:acct
+  interaction: passive
+  time_semantics: windowed
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

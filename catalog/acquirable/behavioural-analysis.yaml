@@ -1,0 +1,38 @@
+schema: pivot.connector/1
+id: behavioural-analysis
+version: 0.1.0
+title: Behavioural and linguistic analysis
+tier: acquirable
+description: Soft evidence for the sponsor/nationality rung; useful only in combination.
+kind: api
+egress: internal
+independence_group: analyst-judgement
+handling:
+  default_tlp: amber
+acquisition:
+  path: develop
+  cost_band: none
+  examples:
+  - working-hours analysis from timestamps
+  - language and keyboard-layout artifacts
+  - compile-time zones
+  lead_time: days
+methods:
+- name: activity_to_profile
+  description: Timezone of activity, language errors, keyboard layouts. Supports a sponsor/nationality
+    assessment; never identifies a person.
+  prior_hit_rate: 0.5
+  accepts:
+  - inet:web:post
+  - file:bytes
+  - inet:flow
+  emits:
+    forms:
+    - lang:language
+    - pol:country
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500

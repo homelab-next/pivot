@@ -1,0 +1,42 @@
+schema: pivot.connector/1
+id: own-cloud-scanner
+version: 0.1.0
+title: Own scanner over cloud ranges
+tier: acquirable
+description: The do-it-yourself version of scan history, current only (no history until you have run it
+  for a while).
+kind: api
+egress: external
+independence_group: own-scanning
+handling:
+  default_tlp: amber
+acquisition:
+  path: develop
+  cost_band: $
+  examples:
+  - zgrab2 / masscan + JARM/JA4S/favicon hashing over AWS ip-ranges.json
+  - scheduled into the lake
+  lead_time: weeks
+  constraints:
+  - Scanning is active; respect provider acceptable-use policy and do not scan from your own AWS account
+    without checking AWS policy
+  - Banner grabbing only; never authenticate or exploit
+methods:
+- name: scan_ranges_for_fingerprint
+  description: 'Sweep AWS ranges for the actor fingerprint now. Active: the hosts see the probe.'
+  prior_hit_rate: 0.5
+  accepts:
+  - inet:ssl:jarmhash
+  - inet:tls:ja4s
+  - crypto:x509:cert
+  - crypto:key
+  - _pivot:http:favicon_mmh3
+  emits:
+    forms:
+    - inet:ipv4
+  interaction: active
+  time_semantics: point_in_time
+  cost:
+    queries: 1
+    expected_ms: 3600000
+  max_results: 500

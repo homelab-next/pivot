@@ -1,0 +1,68 @@
+schema: pivot.connector/1
+id: aws-public-resources
+version: 0.1.0
+title: Public resources by AWS account
+tier: acquirable
+description: 'Pivots across one actor AWS account: everything it shares publicly.'
+kind: api
+egress: external
+independence_group: aws-api
+handling:
+  default_tlp: amber
+acquisition:
+  path: develop
+  cost_band: $
+  examples:
+  - ec2 describe-images --owners <account>
+  - ec2 describe-snapshots --owner-ids <account>
+  - bucket-to-account-ID techniques (s3:ResourceAccount)
+  - GrayhatWarfare (public bucket search)
+  lead_time: days
+  constraints:
+  - Public resources only; do not mount, launch or download private data; get legal review before downloading
+    public snapshot contents
+methods:
+- name: account_to_public_resources
+  description: Public AMIs and EBS snapshots the account shares; actors publish images to reuse across
+    regions.
+  prior_hit_rate: 0.3
+  accepts:
+  - inet:service:tenant
+  emits:
+    forms:
+    - inet:service:resource
+    - inet:service:bucket
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: bucket_to_account
+  prior_hit_rate: 0.6
+  accepts:
+  - inet:service:bucket
+  emits:
+    forms:
+    - inet:service:tenant
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
+- name: bucket_to_contents
+  description: Only if the bucket is publicly listable.
+  prior_hit_rate: 0.4
+  accepts:
+  - inet:service:bucket
+  emits:
+    forms:
+    - file:bytes
+    - inet:url
+  interaction: passive
+  time_semantics: current_state
+  cost:
+    queries: 1
+    expected_ms: 5000
+  max_results: 500
